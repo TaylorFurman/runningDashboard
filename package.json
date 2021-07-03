@@ -4,7 +4,9 @@
   "description": "",
   "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon app.js",
+    "start": "node app.js"
   },
   "repository": {
     "type": "git",
@@ -15,5 +17,12 @@
   "bugs": {
     "url": "https://github.com/TaylorFurman/runningDashboard/issues"
   },
-  "homepage": "https://github.com/TaylorFurman/runningDashboard#readme"
+  "homepage": "https://github.com/TaylorFurman/runningDashboard#readme",
+  "dependencies": {
+    "axios": "^0.21.1",
+    "express": "^4.17.1",
+    "express-es6-template-engine": "^2.2.3",
+    "nodemon": "^2.0.9",
+    "pg-promise": "^10.10.2"
+  }
 }
