@@ -13,10 +13,25 @@ app.set('view engine', 'html');
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
+//calls API data with updated authorization key
 app.get('/', async (req, res) => {
   try {
-    var apiData = await axios.get('https://www.strava.com/api/v3/athlete/activities?access_token=1954b6e4f8aefe7aeaae500e8b220d3d23e8f3ec')
-    console.log(apiData)
+    //var apiData = await axios.get('https://www.strava.com/api/v3/athlete/activities?access_token=493c5aa0ae8fdcc8810b358edd2b8edf4903e44e')
+    axios.get('https://www.strava.com/api/v3/athlete/activities?access_token=493c5aa0ae8fdcc8810b358edd2b8edf4903e44e')
+    .then(res => {
+      var run = res.data; 
+      let str = JSON.stringify(run);
+      let fs = require('fs');
+      fs.writeFile("run_history", str, function(error){
+        if (error){
+          console.log("Error");
+
+        }else{
+          console.log("Success");
+        }
+      })
+    });
+    
     res.render('index')
   } catch (error) {
     console.log(error)
