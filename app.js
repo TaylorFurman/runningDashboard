@@ -15,6 +15,8 @@ app.use(express.json());
 
 app.get('/', async (req, res) => {
   try {
+    var apiData = await axios.get('https://www.strava.com/api/v3/athlete/activities?access_token=1954b6e4f8aefe7aeaae500e8b220d3d23e8f3ec')
+    console.log(apiData)
     res.render('index')
   } catch (error) {
     console.log(error)
