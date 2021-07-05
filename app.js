@@ -1,3 +1,4 @@
+//const nameSearch = document.getElementById('button')
 var express = require('express');
 var es6Renderer = require('express-es6-template-engine');
 var pgp = require('pg-promise')({ });
@@ -8,9 +9,10 @@ var app = express();
 
 app.engine('html', es6Renderer);
 app.set('views', 'templates');
-app.set('view engine', 'html', 'css');
+app.set('view engine', 'html', 'css', 'js');
 
 app.use(express.urlencoded({ extended: true }));
+app.use(express.static('templates'));
 app.use(express.json());
 
 app.get('/', async (req, res) => {
@@ -22,6 +24,14 @@ app.get('/', async (req, res) => {
     console.log(error)
   }
 });
+app.get('/runners', async (req, res,) => {
+  try {
+    //const runners =  await db.any(`SELECT * FROM run_data`)
+    res.render('runnerName')
+  } catch (error) {
+    console.log(error)
+  }
+})
 
 
 
