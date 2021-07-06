@@ -37,6 +37,14 @@ app.get('/runners', async (req, res,) => {
 })
 
 
+// const database = new Datastore('database.db');
+// database.loadDatabase();
+// app.post('/api', (req, res) => {
+//   const data = req.body;
+//   database.insert(data)
+// })
+
+
 
 
 
