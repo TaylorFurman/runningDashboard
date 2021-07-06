@@ -15,27 +15,26 @@ app.use(express.json());
 
 const auth_link = 'https://www.strava.com/oauth/token?client_id=68038&client_secret=2a40842684ae251d045f93518aa934fef7d8af67&refresh_token=a3eff98359952cd21d262b9abb4e4961e3d72339&grant_type=refresh_token'
 
+var auth_url = (`'https://www.strava.com/api/v3/athlete/activities?access_token=5388b2ea78b6ff8550a19a8760411490a2c51423'`);
 
+function reAuthorize(){
+   axios.post(auth_link)
+  .then(res=>{
+      token = res.data.access_token; 
+      
+  })
 
-// function reAuthorize(){
-//   axios.post(auth_link)
-//   .then(res=>{
-//       var auth = res.data.access_token; 
-//       console.log(auth);
-//   })
+}
 
-// }
-
-// reAuthorize();
 
 
 
 //calls API data with updated authorization key
 app.get('/', async (req, res) => {
 try {
-  axios.get('https://www.strava.com/api/v3/athlete/activities?access_token=569309d1114ee1c78fe966a38bcadc70caae5346')
+  axios.get(auth_url)
     .then(res => {
-            var run = res.data; 
+      var run = res.data; 
             let str = JSON.stringify(run);
             let fs = require('fs');
             fs.writeFile("run_history.json", str, function(error){
