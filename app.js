@@ -1,7 +1,8 @@
 var express = require('express');
 var es6Renderer = require('express-es6-template-engine');
 var pgp = require('pg-promise')({ });
-var axios = require('axios')
+var axios = require('axios');
+const { json } = require('express');
 var dbsettings = process.env.DATABASE_URL ||{database: 'vgaimcoc', password: 'LyK0N6ydx5vdmkNT-e8i1i7Wlejo3Hjl', host: 'batyr.db.elephantsql.com', user: 'vgaimcoc'  }
 var db = pgp(dbsettings);
 var app = express();
@@ -21,23 +22,17 @@ var auth_url = ('https://www.strava.com/api/v3/athlete/activities?access_token=f
 
 //calls API data with updated authorization key
 app.get('/', async (req, res) => {
-  
 try {
-  // async function reAuthorize(){
-  //   return await 
-    
-  // }
+  var getAccessToken = await axios.post(auth_link);
+  console.log(getAccessToken, "string");
+  // var accessToken = getAccessToken.then(({data})=>{ 
+  //   res.send(data);
+  //    return data; 
+  // }); 
 
-  var getAccessToken = await axios.post(auth_link)
-  var accessToken = getAccessToken.then(({data})=>{
-     res.send(data);
-     return data;
-     
-  }).catch(error); 
-  var {access_token} = accessToken;
+  var {data:{access_token}} = getAccessToken;
   console.log("Taylor",access_token);
 
-  res.send(reAuthorize);
   // axios.get(auth_url + accestoken)
   //   .then(res => {
   //     var run = res.data; 
@@ -64,6 +59,11 @@ app.use(express.static('templates'));
 function updateDB(){
 
 }
+
+
+
+
+
 
 
 
