@@ -26,15 +26,17 @@ app.get('/', async (req, res) => {
     console.log(error)
   }
 });
-app.get('/runners', async (req, res,) => {
+app.post('/runners', async (req, res,) => {
   try {
+    const dataResults = req.body
+    console.log(dataResults)
     //const results = await new DBFactory().getDB();
     console.log("connected...")
     res.render('runnerName')
   } catch (error) {
     console.log(error)
   }
-})
+}); 
 
 
 // const database = new Datastore('database.db');
