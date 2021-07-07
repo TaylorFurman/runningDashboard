@@ -1,11 +1,10 @@
-//const nameSearch = document.getElementById('button')
-var express = require('express');
-var es6Renderer = require('express-es6-template-engine');
-var pgp = require('pg-promise')({ });
-var axios = require('axios')
-var dbsettings = process.env.DATABASE_URL ||{database: 'vgaimcoc', password: 'LyK0N6ydx5vdmkNT-e8i1i7Wlejo3Hjl', host: 'batyr.db.elephantsql.com', user: 'vgaimcoc'  }
-var db = pgp(dbsettings);
-var app = express();
+const express = require('express');
+const es6Renderer = require('express-es6-template-engine');
+const pgp = require('pg-promise')({ });
+const axios = require('axios')
+const dbsettings = process.env.DATABASE_URL ||{database: 'vgaimcoc', password: 'LyK0N6ydx5vdmkNT-e8i1i7Wlejo3Hjl', host: 'batyr.db.elephantsql.com', user: 'vgaimcoc'  }
+const db = pgp(dbsettings);
+const app = express();
 
 app.engine('html', es6Renderer);
 app.set('views', 'dbFactory');
