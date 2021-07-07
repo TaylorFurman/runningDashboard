@@ -15,41 +15,45 @@ app.use(express.json());
 
 const auth_link = 'https://www.strava.com/oauth/token?client_id=68038&client_secret=2a40842684ae251d045f93518aa934fef7d8af67&refresh_token=a3eff98359952cd21d262b9abb4e4961e3d72339&grant_type=refresh_token'
 
-var auth_url = (`'https://www.strava.com/api/v3/athlete/activities?access_token=5388b2ea78b6ff8550a19a8760411490a2c51423'`);
-
-function reAuthorize(){
-   axios.post(auth_link)
-  .then(res=>{
-      token = res.data.access_token; 
-      
-  })
-
-}
-
+var auth_url = ('https://www.strava.com/api/v3/athlete/activities?access_token=f927ab67c8e11e9bfe511d481a347b4ff4198ad2');
 
 
 
 //calls API data with updated authorization key
 app.get('/', async (req, res) => {
+  
 try {
-  axios.get(auth_url)
-    .then(res => {
-      var run = res.data; 
-            let str = JSON.stringify(run);
-            let fs = require('fs');
-            fs.writeFile("run_history.json", str, function(error){
-              if (error){
-                console.log("Error");
+  // async function reAuthorize(){
+  //   return await 
     
-            }else{
-                console.log("Success");
-            }
-          })
-          });
+  // }
+
+  var getAccessToken = await axios.post(auth_link)
+  var accessToken = getAccessToken.then(({data})=>{
+     res.send(data);
+     return data;
+     
+  }).catch(error); 
+  var {access_token} = accessToken;
+  console.log("Taylor",access_token);
+
+  res.send(reAuthorize);
+  // axios.get(auth_url + accestoken)
+  //   .then(res => {
+  //     var run = res.data; 
+  //           let str = JSON.stringify(run);
+  //           let fs = require('fs');
+  //           fs.writeFile("run_history.json", str, function(error){
+  //             if (error){
+  //               console.log("Error");
     
-        
-          res.render('index')
-        }
+  //           }else{
+  //               console.log("Success");
+  //           }
+  //         })
+  //         });
+  //         res.render('index')
+         }
         
   catch (error) {
   console.log(error)
@@ -65,58 +69,7 @@ function updateDB(){
 
 
    
-    //var apiData = await axios.get('https://www.strava.com/api/v3/athlete/activities?access_token=493c5aa0ae8fdcc8810b358edd2b8edf4903e44e')
-    //axios.get('https://www.strava.com/api/v3/athlete/activities?access_token=493c5aa0ae8fdcc8810b358edd2b8edf4903e44e')
-//     axios.get(`'https://www.strava.com/api/v3/athlete/activities?access_token='+${auth}`)
-//     .then(res => {
-//       var run = res.data; 
-//       let str = JSON.stringify(run);
-//       let fs = require('fs');
-//       fs.writeFile("run_history", str, function(error){
-//         if (error){
-//           console.log("Error");
 
-//         }else{
-//           console.log("Success");
-//         }
-//       })
-//     });
-    
-//     res.render('index')
-//   } catch (error) {
-//     console.log(error)
-//   }
-// });
-
-
-// //calls API data with updated authorization key
-// app.get('/', async (req, res) => {
-//   try {
-//     axios.post(auth_link).then(res=>{var auth = res.data.access_token; return auth;}).then(res=>{
-      
-//     })
-//     //var apiData = await axios.get('https://www.strava.com/api/v3/athlete/activities?access_token=493c5aa0ae8fdcc8810b358edd2b8edf4903e44e')
-//     //axios.get('https://www.strava.com/api/v3/athlete/activities?access_token=493c5aa0ae8fdcc8810b358edd2b8edf4903e44e')
-//     axios.get(`'https://www.strava.com/api/v3/athlete/activities?access_token='+${auth}`)
-//     .then(res => {
-//       var run = res.data; 
-//       let str = JSON.stringify(run);
-//       let fs = require('fs');
-//       fs.writeFile("run_history", str, function(error){
-//         if (error){
-//           console.log("Error");
-
-//         }else{
-//           console.log("Success");
-//         }
-//       })
-//     });
-    
-//     res.render('index')
-//   } catch (error) {
-//     console.log(error)
-//   }
-// });
 
 
 
