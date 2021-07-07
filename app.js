@@ -14,9 +14,15 @@ app.set('view engine', 'html');
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
+
+//client_id & client_secret need to be interchangeable for multiple runners (send to database)
 const auth_link = 'https://www.strava.com/oauth/token?client_id=68038&client_secret=2a40842684ae251d045f93518aa934fef7d8af67&refresh_token=a3eff98359952cd21d262b9abb4e4961e3d72339&grant_type=refresh_token'
 
-var auth_url = ('https://www.strava.com/api/v3/athlete/activities?access_token=f927ab67c8e11e9bfe511d481a347b4ff4198ad2');
+
+//var auth_url = ('https://www.strava.com/api/v3/athlete/activities?&access_token=f927ab67c8e11e9bfe511d481a347b4ff4198ad2');
+var auth_url = ('https://www.strava.com/api/v3/athlete/activities?&access_token=');
+
+'https://www.strava.com/api/v3/athlete/activities?access_token=f927ab67c8e11e9bfe511d481a347b4ff4198ad2'
 
 
 
@@ -31,23 +37,23 @@ try {
   // }); 
 
   var {data:{access_token}} = getAccessToken;
-  console.log("Taylor",access_token);
+  //console.log(access_token);
 
-  // axios.get(auth_url + accestoken)
-  //   .then(res => {
-  //     var run = res.data; 
-  //           let str = JSON.stringify(run);
-  //           let fs = require('fs');
-  //           fs.writeFile("run_history.json", str, function(error){
-  //             if (error){
-  //               console.log("Error");
+   axios.get(auth_url + access_token)
+     .then(res => {
+       var run = res.data; 
+             let str = JSON.stringify(run);
+             let fs = require('fs');
+             fs.writeFile("run_history.json", str, function(error){
+               if (error){
+                 console.log("Error");
     
-  //           }else{
-  //               console.log("Success");
-  //           }
-  //         })
-  //         });
-  //         res.render('index')
+             }else{
+                 console.log("Success");
+             }
+           })
+           });
+           res.render('index')
          }
         
   catch (error) {
