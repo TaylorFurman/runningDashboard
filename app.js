@@ -44,7 +44,16 @@ app.post('/runners', async (req, res,) => {
 //   const data = req.body;
 //   database.insert(data)
 // })
-
+// run.json({
+//   distance: run.distance,
+//   type: run.type,
+//   start_date: run.start_date,
+//   average_speed: run.average_speed,
+//   average_heart_rate: run.average_heart_rate,
+//   moving_time: run.moving_time,
+//   start_latlng: run.start_latlng,
+//   end_latlng: run.end_latlng
+// })
 
 
 
