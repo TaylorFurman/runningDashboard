@@ -1,17 +1,34 @@
-var pgp = require('pg-promise')({ });
-var axios = require('axios')
-
-
-class StravaApi {
-    constructor() {
-        this.data = []
+function stravaApiCode () {
+    const headers = {
+      'Accept' : 'application/json, text/plain, */*',
+      'Content-Type': 'application/json'
     }
-    fetchApi() {
-        axios.get('https://www.strava.com/api/v3/athlete/activities?access_token=d9233fdc26b893840f91051ef2581bf9e4ca1af7')
-        .then(res => {
-            console.log(res)
-        })
-    }
-}
+    const body = JSON.stringify({
+      client_id: process.env.STRAVA_CLIENT_ID,
+      client_secret: process.env.STRAVA_SECRET,
+      refresh_token: process.env.STRAVA_REFRESH_TOKEN,
+      grant_type: 'refresh_token'
+    })
+    const reauthorizeResponse = await fetch('https://www.strava.com/oauth/token', {
+        method = 'post',
+        "headers": headers,
+        "body": body
+    })
+    const reAuthizeJson = await reauthorizeResponse.json()
+    const response = await fetch('https://www.strava.com/api/v3/athlete/activities?=access_token=' + reAuthizeJson.access_token)
+    const json = await response.json()
+    const {distance, moving_time, count} = json.all_run_totals
+    
+    return res.status(200).json({
+        count,
+        distance,
+        moving_time
+    })
+  }
+stravaApiCode();
 
-module.exports = StravaApi
+
+var PORT = process.env.PORT || 3000;
+  app.listen(PORT, function () {
+    console.log('Listening on port ' + PORT);
+  });

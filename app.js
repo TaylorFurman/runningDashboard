@@ -1,10 +1,12 @@
 const express = require('express');
+//const StravaApiV3 = require('strava_api_v3')
 const es6Renderer = require('express-es6-template-engine');
 const pgp = require('pg-promise')({ });
 const axios = require('axios')
 const dbsettings = process.env.DATABASE_URL ||{database: 'vgaimcoc', password: 'LyK0N6ydx5vdmkNT-e8i1i7Wlejo3Hjl', host: 'batyr.db.elephantsql.com', user: 'vgaimcoc'  }
 const db = pgp(dbsettings);
 const app = express();
+require('dotenv').config();
 
 app.engine('html', es6Renderer);
 app.set('views', 'dbFactory');
@@ -16,27 +18,43 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static('templates'));
 app.use(express.json());
 
-app.get('/', async (req, res) => {
+// const auth_link = 'https://www.strava.com/oauth/token?client_id=68038&client_secret=2a40842684ae251d045f93518aa934fef7d8af67&refresh_token=a3eff98359952cd21d262b9abb4e4961e3d72339&grant_type=refresh_token'
+
+//var auth_url = ('https://www.strava.com/api/v3/athlete/activities?=access_token=c78ea1ade287cb4389c1b74fa8c7f85c96b2b591');
+
+
+
+app.get('/app.js', async (req, res) => {
   try {
-    const stravaData =  await new StravaApi().fetchApi();
-    console.log(stravaData)
     res.render('index')
   } catch (error) {
-    console.log(error)
+    //console.log(error)
   }
 });
 app.post('/runners', async (req, res,) => {
-  try {
-    const dataResults = req.body
-    console.log(dataResults)
-    //const results = await new DBFactory().getDB();
-    console.log("connected...")
-    res.render('runnerName')
-  } catch (error) {
-    console.log(error)
-  }
-}); 
+  // const dataResults = req.body
+  // console.log(dataResults)
+  // var auth_url = (`https://www.strava.com/api/v3/athlete/activities?=access_token=${getAccessToken}`);
+  // var getAccessToken = await axios.post(auth_link)
+  // console.log(getAccessToken, "string");
+  // var {data:{access_token}} = getAccessToken;
+  // //console.log("Taylor",access_token);
+  // console.log("Shane", auth_url);
+    // axios.get(auth_url)
+    // .then(res => {
+    //   var runs = res.data; 
+    //      runs.map(run => {
+    //       console.log("Taylor", run)
 
+    //      })
+    //       });
+    res.render('runnerName')
+      })
+        
+//   .catch (error) {
+//   console.log(error)
+// }
+// });
 
 // const database = new Datastore('database.db');
 // database.loadDatabase();
