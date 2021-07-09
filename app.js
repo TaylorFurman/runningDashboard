@@ -28,48 +28,54 @@ var auth_url = ('https://www.strava.com/api/v3/athlete/activities?&access_token=
 
 //calls API data with updated authorization key
 app.get('/', async (req, res) => {
-try {
-  var getAccessToken = await axios.post(auth_link);
-  console.log(getAccessToken, "string");
+ try {
+   var getAccessToken = await axios.post(auth_link);
+   console.log(getAccessToken, "string");
   // var accessToken = getAccessToken.then(({data})=>{ 
-  //   res.send(data);
-  //    return data; 
-  // }); 
+    // res.send(data);
+    // return data; 
+   //}); 
 
-  var {data:{access_token}} = getAccessToken;
+   var {data:{access_token}} = getAccessToken;
   //console.log(access_token);
 
-   axios.get(auth_url + access_token)
-     .then(res => {
-       var run = res.data; 
-      // let str = JSON.stringify(run);
-       //const myData = JSON.parse(str);
+var data = await db.query('SELECT * FROM run_data');
+//res.send(data);
 
-       console.log(run);
-             //let str = JSON.stringify(run);
-             //let fs = require('fs');
-             //fs.writeFile("run_history.json", str, function(error){
-              // if (error){
-                // console.log("Error");
-    
-             //}else{
-             //    console.log("Success");
-             //}
-           //})
-           });
-           res.render('index')
-         }
-        
-  catch (error) {
-  console.log(error)
-}
-});
+   try{
+    await axios.get(auth_url + access_token)
+   
+    .then(res => {
+     var runs = res.data; 
+    console.log("Taylor", runs)
+   runs.map(async(run) => {
+         await db.none(`INSERT INTO run_data (distance,type,start_date, average_speed, average_heart_rate, moving_time,  start_latlng, end_latlng) VALUES(${run.distance},
+          ${run.type}, 
+          ${run.start_date},
+          ${run.average_speed}, 
+          ${run.average_heart_rate}, 
+          ${run.moving_time}, 
+          ${run.start_latlng}, 
+          ${run.endlatlng})`);  
+     });
+});  
+ }catch(error){
+ console.log(error);
+ }
+ 
+
+
+
+ }catch(error){
+
+ }});
+
 app.use(express.static('templates'));
 
 function updateDB(){
 
 }
-
+ 
 
 
 
