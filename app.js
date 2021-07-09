@@ -4,7 +4,11 @@ const fetch = require("node-fetch")
 const es6Renderer = require('express-es6-template-engine');
 const pgp = require('pg-promise')({ });
 const axios = require('axios')
-const dbsettings = process.env.DATABASE_URL ||{database: 'vgaimcoc', password: 'LyK0N6ydx5vdmkNT-e8i1i7Wlejo3Hjl', host: 'batyr.db.elephantsql.com', user: 'vgaimcoc'  }
+const dbsettings = process.env.DATABASE_URL ||{
+database:'vgaimcoc',
+ password: 'LyK0N6ydx5vdmkNT-e8i1i7Wlejo3Hjl',
+ host: 'batyr.db.elephantsql.com',
+ user: 'vgaimcoc'  }
 const db = pgp(dbsettings);
 const app = express();
 //require('dotenv').config();
@@ -30,9 +34,10 @@ app.use(express.json());
 
 app.get('/app.js', async (req, res) => {
   try {
+    console.log("Connected...")
     res.render('index')
   } catch (error) {
-    //console.log(error)
+    console.log(error)
   }
 });
 app.post('/runners', async (req, res,) => {
@@ -58,7 +63,7 @@ app.post('/runners', async (req, res,) => {
             moving_time, 
             start_latlng, 
             end_latlng
-            ) values(
+            ) VALUES (
               ${run.distance},
               ${run.type}, 
               ${run.start_date},
