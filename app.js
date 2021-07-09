@@ -1,18 +1,29 @@
-var express = require('express');
-var es6Renderer = require('express-es6-template-engine');
-var pgp = require('pg-promise')({ });
-var axios = require('axios');
-const { json } = require('express');
-var dbsettings = process.env.DATABASE_URL ||{database: 'vgaimcoc', password: 'LyK0N6ydx5vdmkNT-e8i1i7Wlejo3Hjl', host: 'batyr.db.elephantsql.com', user: 'vgaimcoc'  }
-var db = pgp(dbsettings);
-var app = express();
+const express = require('express');
+const fetch = require("node-fetch")
+//const StravaApiV3 = require('strava_api_v3')
+const es6Renderer = require('express-es6-template-engine');
+const pgp = require('pg-promise')({ });
+const axios = require('axios')
+const dbsettings = process.env.DATABASE_URL ||{
+database:'vgaimcoc',
+ password: 'LyK0N6ydx5vdmkNT-e8i1i7Wlejo3Hjl',
+ host: 'batyr.db.elephantsql.com',
+ user: 'vgaimcoc'  }
+const db = pgp(dbsettings);
+const app = express();
+//require('dotenv').config();
+
 
 app.engine('html', es6Renderer);
+app.set('views', 'dbFactory');
+app.set('views', 'stravaInfo')
 app.set('views', 'templates');
-app.set('view engine', 'html');
+app.set('view engine', 'html', 'css', 'js');
 
 app.use(express.urlencoded({ extended: true }));
+app.use(express.static('templates'));
 app.use(express.json());
+
 
 
 //client_id & client_secret need to be interchangeable for multiple runners (send to database)
@@ -23,6 +34,9 @@ const auth_link = 'https://www.strava.com/oauth/token?client_id=68038&client_sec
 var auth_url = ('https://www.strava.com/api/v3/athlete/activities?&access_token=');
 
 
+
+//var auth_url = ('https://www.strava.com/api/v3/athlete/activities?=access_token=c78ea1ade287cb4389c1b74fa8c7f85c96b2b591');
+// https://www.strava.com/api/v3/athlete/activities?&access_token=
 
 
 
@@ -63,9 +77,6 @@ var data = await db.query('SELECT * FROM run_data');
  console.log(error);
  }
  
-
-
-
  }catch(error){
 
  }});
@@ -76,39 +87,6 @@ function updateDB(){
 
 }
  
-
-
-
-
-
-
-
-
-   
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 var PORT = process.env.PORT || 8000;
