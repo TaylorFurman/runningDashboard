@@ -20,6 +20,7 @@
   "homepage": "https://github.com/TaylorFurman/runningDashboard#readme",
   "dependencies": {
     "axios": "^0.21.1",
+    "chart.js": "^3.4.1",
     "express": "^4.17.1",
     "express-es6-template-engine": "^2.2.3",
     "nodemon": "^2.0.9",
