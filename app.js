@@ -41,7 +41,7 @@ var auth_url = ('https://www.strava.com/api/v3/athlete/activities?&access_token=
 
 
 //calls API data with updated authorization key
-app.get('/', async (req, res) => {
+app.get('/app.js', async (req, res) => {
  try {
    var getAccessToken = await axios.post(auth_link);
    console.log(getAccessToken, "string");
@@ -62,16 +62,16 @@ var data = await db.query('SELECT * FROM run_data');
     .then(res => {
      var runs = res.data; 
     console.log("Taylor", runs)
-   runs.map(async(run) => {
-         await db.none(`INSERT INTO run_data (distance,type,start_date, average_speed, average_heart_rate, moving_time,  start_latlng, end_latlng) VALUES(${run.distance},
-          ${run.type}, 
-          ${run.start_date},
-          ${run.average_speed}, 
-          ${run.average_heart_rate}, 
-          ${run.moving_time}, 
-          ${run.start_latlng}, 
-          ${run.endlatlng})`);  
-     });
+  //  runs.map(async(run) => {
+  //        await db.none(`INSERT INTO run_data (distance,type,start_date, average_speed, average_heart_rate, moving_time,  start_latlng, end_latlng) VALUES(${run.distance},
+  //         ${run.type}, 
+  //         ${run.start_date},
+  //         ${run.average_speed}, 
+  //         ${run.average_heart_rate}, 
+  //         ${run.moving_time}, 
+  //         ${run.start_latlng}, 
+  //         ${run.endlatlng})`);  
+  //    });
 });  
  }catch(error){
  console.log(error);
