@@ -44,7 +44,7 @@ var auth_url = ('https://www.strava.com/api/v3/athlete/activities?&access_token=
 app.get('/app.js', async (req, res) => {
  try {
    var getAccessToken = await axios.post(auth_link);
-   console.log(getAccessToken, "string");
+   //console.log(getAccessToken, "string");
   // var accessToken = getAccessToken.then(({data})=>{ 
     // res.send(data);
     // return data; 
@@ -53,26 +53,30 @@ app.get('/app.js', async (req, res) => {
    var {data:{access_token}} = getAccessToken;
   //console.log(access_token);
 
-var data = await db.query('SELECT * FROM run_data');
+//var data = await db.query('SELECT * FROM run_data');
 //res.send(data);
 
    try{
     await axios.get(auth_url + access_token)
    
-    .then(res => {
+    .then(async res => {
      var runs = res.data; 
-    console.log("Taylor", runs)
-  //  runs.map(async(run) => {
-  //        await db.none(`INSERT INTO run_data (distance,type,start_date, average_speed, average_heart_rate, moving_time,  start_latlng, end_latlng) VALUES(${run.distance},
-  //         ${run.type}, 
-  //         ${run.start_date},
-  //         ${run.average_speed}, 
-  //         ${run.average_heart_rate}, 
-  //         ${run.moving_time}, 
-  //         ${run.start_latlng}, 
-  //         ${run.endlatlng})`);  
-  //    });
-});  
+        //console.log("Taylor", runs)
+        console.log(runs[0].distance);
+        console.log(runs.length);
+        //   runs.map(async(run) => {
+        // //    //db.none(`INSERT INTO run_data (distance,type,start_date, average_speed, average_heart_rate, moving_time,  start_latlng, end_latlng) SELECT(${runs[0].distance},     
+        await db.any(`IF INSERT INTO run_data VALUES(DEFAULT, ${runs[0].distance},
+              '${runs[0].type}', 
+              '${runs[0].start_date}',
+              '${runs[0].average_speed}', 
+              '${runs[0].average_heartrate}', 
+              '${runs[0].moving_time}', 
+              '${runs[0].start_latlng}', 
+              '${runs[0].end_latlng}',
+              '${runs[0].id}')`);
+              
+      });  
  }catch(error){
  console.log(error);
  }
