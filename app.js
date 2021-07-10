@@ -4,6 +4,7 @@ const fetch = require("node-fetch")
 const es6Renderer = require('express-es6-template-engine');
 const pgp = require('pg-promise')({ });
 const axios = require('axios')
+const Chart = require('chart.js')
 const dbsettings = process.env.DATABASE_URL ||{
 database:'vgaimcoc',
  password: 'LyK0N6ydx5vdmkNT-e8i1i7Wlejo3Hjl',
@@ -27,30 +28,21 @@ app.use(express.json());
 
  // const auth_link = 'https://www.strava.com/oauth/token?client_id=68038&client_secret=2a40842684ae251d045f93518aa934fef7d8af67&refresh_token=a3eff98359952cd21d262b9abb4e4961e3d72339&grant_type=refresh_token'
 
-var auth_url = ('https://www.strava.com/api/v3/athlete/activities?=access_token=');
+ var auth_url = ('https://www.strava.com/api/v3/athlete/activities?&access_token=');
 // https://www.strava.com/api/v3/athlete/activities?&access_token=
 
 
 
 app.get('/app.js', async (req, res) => {
-
  try {
-   var getAccessToken = await axios.post(auth_link);
-   console.log(getAccessToken, "string");
-  //  var accessToken = getAccessToken.then(({data})=>{ 
-  //    res.send(data);
-  //    return data; 
-  //  }); 
-
-   var {data:{access_token}} = getAccessToken;
-  //console.log(access_token);
+  var getAccessToken = await axios.post(auth_link);
+  var {data:{access_token}} = getAccessToken;
+  console.log(access_token);
 
 //var data = await db.query('SELECT * FROM run_data');
 //res.send(data);
-
    try{
     await axios.get(auth_url + access_token)
-   
     .then(async res => {
      var runs = res.data; 
         //console.log("Taylor", runs)
@@ -66,15 +58,13 @@ app.get('/app.js', async (req, res) => {
               '${runs[0].moving_time}', 
               '${runs[0].start_latlng}', 
               '${runs[0].end_latlng}',
-              '${runs[0].id}')`);
-              
+              '${runs[0].id}')`);      
       });  
  }catch(error){
  console.log(error);
  }
  
  }catch(error){
-
  }});
 
 app.use(express.static('templates'));
@@ -87,3 +77,11 @@ var PORT = process.env.PORT || 8000;
   app.listen(PORT, function () {
     console.log('Listening on port ' + PORT);
   });
+
+
+  app.post('/runners', async (req, res,) => {
+
+
+     
+      res.render('runnerInfo')
+        });
