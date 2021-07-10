@@ -5,6 +5,7 @@ const es6Renderer = require('express-es6-template-engine');
 const pgp = require('pg-promise')({ });
 const axios = require('axios')
 const Chart = require('chart.js')
+//var L = require('leaflet');
 const dbsettings = process.env.DATABASE_URL ||{
 database:'vgaimcoc',
  password: 'LyK0N6ydx5vdmkNT-e8i1i7Wlejo3Hjl',
@@ -79,8 +80,13 @@ var PORT = process.env.PORT || 8000;
   });
 
 
-  app.post('/runners', async (req, res,) => {
-
+  app.get('/runners', async (req, res) => {
+    
+    db.any(`SELECT * FROM run_data VALUES`)
+    .then(run=>{
+      var startLatitude = run[0].start_latlng;
+      console.log(startLatitude);
+    });
 
      
       res.render('runnerInfo')
