@@ -13,7 +13,6 @@ const db = pgp(dbsettings);
 const app = express();
 //require('dotenv').config();
 
-
 app.engine('html', es6Renderer);
 app.set('views', 'dbFactory');
 app.set('views', 'stravaInfo')
@@ -24,31 +23,24 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static('templates'));
 app.use(express.json());
 
+ const auth_link =  'https://www.strava.com/oauth/token?client_id=68038&client_secret=2a40842684ae251d045f93518aa934fef7d8af67&refresh_token=a3eff98359952cd21d262b9abb4e4961e3d72339&grant_type=refresh_token'
 
+ // const auth_link = 'https://www.strava.com/oauth/token?client_id=68038&client_secret=2a40842684ae251d045f93518aa934fef7d8af67&refresh_token=a3eff98359952cd21d262b9abb4e4961e3d72339&grant_type=refresh_token'
 
-//client_id & client_secret need to be interchangeable for multiple runners (send to database)
-const auth_link = 'https://www.strava.com/oauth/token?client_id=68038&client_secret=2a40842684ae251d045f93518aa934fef7d8af67&refresh_token=a3eff98359952cd21d262b9abb4e4961e3d72339&grant_type=refresh_token'
-
-
-//Example of access token var auth_url = ('https://www.strava.com/api/v3/athlete/activities?&access_token=f927ab67c8e11e9bfe511d481a347b4ff4198ad2');
-var auth_url = ('https://www.strava.com/api/v3/athlete/activities?&access_token=');
-
-
-
-//var auth_url = ('https://www.strava.com/api/v3/athlete/activities?=access_token=c78ea1ade287cb4389c1b74fa8c7f85c96b2b591');
+var auth_url = ('https://www.strava.com/api/v3/athlete/activities?=access_token=');
 // https://www.strava.com/api/v3/athlete/activities?&access_token=
 
 
 
-//calls API data with updated authorization key
 app.get('/app.js', async (req, res) => {
+
  try {
    var getAccessToken = await axios.post(auth_link);
-   //console.log(getAccessToken, "string");
-  // var accessToken = getAccessToken.then(({data})=>{ 
-    // res.send(data);
-    // return data; 
-   //}); 
+   console.log(getAccessToken, "string");
+  //  var accessToken = getAccessToken.then(({data})=>{ 
+  //    res.send(data);
+  //    return data; 
+  //  }); 
 
    var {data:{access_token}} = getAccessToken;
   //console.log(access_token);
@@ -87,10 +79,8 @@ app.get('/app.js', async (req, res) => {
 
 app.use(express.static('templates'));
 
-function updateDB(){
 
-}
- 
+
 
 
 var PORT = process.env.PORT || 8000;
