@@ -66,7 +66,7 @@ app.get('/app.js', async (req, res) => {
         console.log(runs.length);
         //   runs.map(async(run) => {
         // //    //db.none(`INSERT INTO run_data (distance,type,start_date, average_speed, average_heart_rate, moving_time,  start_latlng, end_latlng) SELECT(${runs[0].distance},     
-        await db.any(`IF INSERT INTO run_data VALUES(DEFAULT, ${runs[0].distance},
+        await db.any(`INSERT INTO run_data VALUES(DEFAULT, ${runs[0].distance},
               '${runs[0].type}', 
               '${runs[0].start_date}',
               '${runs[0].average_speed}', 
