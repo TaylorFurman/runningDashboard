@@ -6,6 +6,7 @@ const pgp = require('pg-promise')({ });
 const axios = require('axios')
 const Chart = require('chart.js')
 const exphbs = require('express-handlebars');
+const { dirname } = require('path');
 
 
 //following tutorial
@@ -101,7 +102,7 @@ db.any(`SELECT * FROM run_data VALUES`)
   const run_data = JSON.stringify(run);
   //console.log(run_data);
   let fs = require("fs")
-  fs.writeFile("run_history.js", run_data, function(error){
+  fs.writeFile(__dirname + "/templates/run_history.json", run_data, function(error){
     if (error){
       console.timeLog("Error")
     }else{
@@ -109,10 +110,8 @@ db.any(`SELECT * FROM run_data VALUES`)
     }
     
   })
-
   res.render('runnerInfo')
   })
-  
 });
 
      
