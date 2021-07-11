@@ -5,14 +5,23 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
    integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
    crossorigin=""/>
+
    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
    integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
    crossorigin=""></script>
+   <script src="Polyline.encoded.js"></script>
+   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
    <link rel="stylesheet" href="./styles.css">
+   <script src="require.js"></script>
+   <script src="index.js"></script>
+   
+   
     <title>Your Info</title>
+
     
 </head>
 <body>
@@ -23,36 +32,46 @@
 
     <div id="mapid"></div>
 
-    <script>
-        var theChart = document.getElementById('myChart').getContext('2d')
-        var runDataChart = new Chart (theChart, {
-            type: 'bar', 
-            data: {
-                labels: ['Distance', 'Average_Heartrate', 'Average_Speed', 'Moving_Time' ],
-                datasets: [{
-                    label: 'Run Stats',
-                    data: [
-                        6.32,
-                        120.1,
-                        7.9,
-                        9.3
-                    ]
-                }]
-            },
-            options: {}
-        })
 
-        var map = L.map('mapid').setView([51.505, -0.09], 13);
+    <script src=".\runningDashboard\app.js"></script>
+    <script src="../run_history.json"></script>
+<script>
+var theChart = document.getElementById('myChart').getContext('2d')
+    var runDataChart = new Chart (theChart, {
+        type: 'bar', 
+        data: {
+            labels: ['Distance', 'Average_Heartrate', 'Average_Speed', 'Moving_Time' ],
+            datasets: [{
+                label: 'Run Stats',
+                data: [
+                    6.32,
+                    120.1,
+                    7.9,
+                    9.3
+                ]
+            }]
+        },
+        options: {}
+    })
+    var map = L.map('mapid').setView([51.505, -0.09], 13);
 
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-        }).addTo(map);
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+}).addTo(map);
+
+$(document).ready(function(){
+    $.getJSON("run_history.json", function(data){
+            console.log(data.id); // Prints: Harry
+            console.log(data.distance); // Prints: 14
+        }).fail(function(){
+            console.log("An error has occurred.");
+        });
+    });
 
 
-
-
-        
-    </script>
+</script>
+    
+   
 </body>
 </html>
 

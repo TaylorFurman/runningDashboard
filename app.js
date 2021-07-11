@@ -5,7 +5,19 @@ const es6Renderer = require('express-es6-template-engine');
 const pgp = require('pg-promise')({ });
 const axios = require('axios')
 const Chart = require('chart.js')
-//var L = require('leaflet');
+const exphbs = require('express-handlebars');
+
+
+//following tutorial
+
+// console.log(map);
+// map.setView([47.70, 13.35], 7);
+// var osm_mapnik = L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+// 	maxZoom: 19,
+// 	attribution: '&copy; OSM Mapnik <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+// }).addTo(map);
+
+//continue original code
 const dbsettings = process.env.DATABASE_URL ||{
 database:'vgaimcoc',
  password: 'LyK0N6ydx5vdmkNT-e8i1i7Wlejo3Hjl',
@@ -16,6 +28,7 @@ const app = express();
 //require('dotenv').config();
 
 app.engine('html', es6Renderer);
+app.engine('handlebars', exphbs());
 app.set('views', 'dbFactory');
 app.set('views', 'stravaInfo')
 app.set('views', 'templates');
@@ -45,21 +58,22 @@ app.get('/app.js', async (req, res) => {
    try{
     await axios.get(auth_url + access_token)
     .then(async res => {
-     var runs = res.data; 
+     var run = res.data; 
         //console.log("Taylor", runs)
-        console.log(runs[0].distance);
-        console.log(runs.length);
+        //console.log(run[0].distance);
+        //console.log(run.map.summary_polyline);
         //   runs.map(async(run) => {
         // //    //db.none(`INSERT INTO run_data (distance,type,start_date, average_speed, average_heart_rate, moving_time,  start_latlng, end_latlng) SELECT(${runs[0].distance},     
-        await db.any(`INSERT INTO run_data VALUES(DEFAULT, ${runs[0].distance},
-              '${runs[0].type}', 
-              '${runs[0].start_date}',
-              '${runs[0].average_speed}', 
-              '${runs[0].average_heartrate}', 
-              '${runs[0].moving_time}', 
-              '${runs[0].start_latlng}', 
-              '${runs[0].end_latlng}',
-              '${runs[0].id}')`);      
+        await db.any(`INSERT INTO run_data VALUES(DEFAULT, ${run[0].distance},
+              '${run[0].type}', 
+              '${run[0].start_date}',
+              '${run[0].average_speed}', 
+              '${run[0].average_heartrate}', 
+              '${run[0].moving_time}', 
+              '${run[0].start_latlng}', 
+              '${run[0].end_latlng}',
+              '${run[0].id}',
+              '${run[0].map.summary_polyline}')`);      
       });  
  }catch(error){
  console.log(error);
@@ -75,19 +89,31 @@ app.use(express.static('templates'));
 
 
 var PORT = process.env.PORT || 8000;
-  app.listen(PORT, function () {
-    console.log('Listening on port ' + PORT);
-  });
+app.listen(PORT, function () {
+  console.log('Listening on port ' + PORT);
+});
 
 
-  app.get('/runners', async (req, res) => {
+app.get('/runners', async (req, res) => {
+
+db.any(`SELECT * FROM run_data VALUES`)
+.then(run=>{
+  const run_data = JSON.stringify(run);
+  //console.log(run_data);
+  let fs = require("fs")
+  fs.writeFile("run_history.js", run_data, function(error){
+    if (error){
+      console.timeLog("Error")
+    }else{
+      console.log("Success");
+    }
     
-    db.any(`SELECT * FROM run_data VALUES`)
-    .then(run=>{
-      var startLatitude = run[0].start_latlng;
-      console.log(startLatitude);
-    });
+  })
+
+  res.render('runnerInfo')
+  })
+  
+});
 
      
-      res.render('runnerInfo')
-        });
+      
