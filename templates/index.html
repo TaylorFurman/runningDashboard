@@ -4,21 +4,33 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
-   integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
-   crossorigin=""/>
-   <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
-   integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
-   crossorigin=""></script>
-   <link rel="stylesheet" href="/templates/styles.css">
     <title>Welcome Runner</title>
+    <link rel="stylesheet" href="style.css">
     <style>
+        body {background-color: lightgray;}
+        #button { background: #333; border: none; height: 36px; padding: 0 1rem; margin: 0.25rem; border-radius: 3px; outline: none; color: #fff; }
         #header {display: flex; justify-content: center;}
+        #logo {width: 70vw; height: 70%;}
+        #logoImage {width: 35vw; height: 20%; background-color: lightgray;}
+        
     </style>
 </head>
 <body>
     <h1 id="header">Run Until You Poop!</h1>
-    <div id="mapid"></div>
+    <div>
+        <img src="data:image/png;base64,
+        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" alt="runner logo" id="logoImage">
+    </div>
+    <div id="welcomeMessage">
+        <h2>Welcome Runner</h2>
+        <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Asperiores, veritatis <br> reprehenderit similique ipsam natus eligendi vel eaque, doloribus officia voluptate ratione.<br> Sed, mollitia repellat. Non nihil sunt eius a consequuntur!</p>
+        <div id="searchBarWrapper">
+            <form id="form" action="/runners" method="POST">
+            <input type="text" name="searchBar" id="searchBar" placeholder="Search For Your Name">
+            <button type="submit" id="button">Search</button>
+        </form>
+        </div> 
+    </div>
     
 </body>
 </html>
