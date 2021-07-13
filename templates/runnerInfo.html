@@ -19,6 +19,21 @@
    <link rel="stylesheet" href="./styles.css">
    <script src="require.js"></script>
    <script src="index.js"></script>
+
+   <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.8.0/main.min.js"></script>
+   <link href='fullcalendar/main.css' rel='stylesheet' />
+    <script src='fullcalendar/main.js'></script>
+    <script>
+
+        document.addEventListener('DOMContentLoaded', function() {
+          var calendarEl = document.getElementById('calendar');
+          var calendar = new FullCalendar.Calendar(calendarEl, {
+            initialView: 'dayGridMonth'
+          });
+          calendar.render();
+        });
+  
+      </script>
    
    
     <title>Your Info</title>
@@ -32,6 +47,8 @@
     <canvas id="myChart"></canvas>
 
     <div id="mapid"></div>
+
+    <div id='calendar'></div>
 
 
     <script src=".\runningDashboard\app.js"></script>
@@ -62,16 +79,15 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
 }).addTo(map);
 
-
 axios.get('run_history.json')
 .then(res=> {
     data = res.data;
     //loops through all data in JSON file and displays them on Leaflet map
     //Need to figure out how to individually select by running id as well
     for(i=0; i<data.length; i++){
-        console.log(data[i].summary_polyline);
+        //console.log(data[i].summary_polyline);
         var coordinates = L.Polyline.fromEncoded(data[i].summary_polyline).getLatLngs()
-        console.log(coordinates);
+        //console.log(coordinates);
 
         L.polyline(
             coordinates,
@@ -83,11 +99,14 @@ axios.get('run_history.json')
             }
 
         ).addTo(map)
-    }
-        
-    
+    }    
     //console.log(res.data);
 });
+
+
+
+
+
 
 
 </script>

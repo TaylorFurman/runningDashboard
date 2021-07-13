@@ -60,11 +60,9 @@ app.get('/app.js', async (req, res) => {
     await axios.get(auth_url + access_token)
     .then(async res => {
      var run = res.data; 
-        //console.log("Taylor", runs)
-        //console.log(run[0].distance);
-        //console.log(run.map.summary_polyline);
-        //   runs.map(async(run) => {
-        // //    //db.none(`INSERT INTO run_data (distance,type,start_date, average_speed, average_heart_rate, moving_time,  start_latlng, end_latlng) SELECT(${runs[0].distance},     
+
+     //Need to finish IF statement below
+      //if(db.any(`SELECT * FROM run_day VALUES(run_id) IS `))
         await db.any(`INSERT INTO run_data VALUES(DEFAULT, ${run[0].distance},
               '${run[0].type}', 
               '${run[0].start_date}',
