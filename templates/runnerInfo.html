@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <title>Your Info</title>
+</head>
+<body>
+    <h1>New Page</h1>
+    <div id="runData">
+        <canvas id="chart"></canvas>
+    </div>
+    <script>
+        var theChart = document.getElementById('chart').getContext('2d');
+        var theRunData = new Chart(theChart, {
+            type: 'bar',
+            data: {
+                labels:[],
+                datasets: [{
+                    label: 'Your Run Stats',
+                    data: [
+
+                    
+                    ]
+                }]
+            },
+            options:{}
+        })
+    </script>
+</body>
+</html>
