@@ -6,28 +6,126 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <title>Your Info</title>
+    <style>
+        #runData {width: 40%; height: 30%;}
+    </style>
 </head>
 <body>
     <h1>New Page</h1>
     <div id="runData">
-        <canvas id="chart"></canvas>
-    </div>
-    <script>
-        var theChart = document.getElementById('chart').getContext('2d');
-        var theRunData = new Chart(theChart, {
-            type: 'bar',
-            data: {
-                labels:[],
-                datasets: [{
-                    label: 'Your Run Stats',
-                    data: [
-
+        <canvas id="chart" width="300" height="300"></canvas>
+        <script>
+            var theChart = document.getElementById('chart').getContext('2d');
+            var theRunData = new Chart(theChart, {
+                type: 'bar',
+                data: {
+                    datasets: [{
+                        label: 'Run Distance in Kilometers',
+                        data: [
+                            6.4,
+                            5.2,
+                            5.1,
+                            5.1,
+                            2.3,
+                            10.1,
+                            1.9,
+                            6.9,
+                            5.1,
+                            2.1,
+                            3.6,
+                            5.1,
+                            8.4,
+                            8.1,
+                            3.2,
+                            4.9,
+                            6.4,
+                            3.2,
+                            5.5,
+                            5.03,
+                            6.4,
+                            3.2,
+                            5.06,
+                            3.2,
+                            11.3
+                        ],
+                        borderColor: ['rgb(255,99,132)'],
+                        backgroundColor: ['rgb(255, 99, 132, 0.2)']
+                    }, {
+                        label: 'Average Heart Rate',
+                        data: [
+                            160.4,
+                            162.9,
+                            162.9,
+                            161.6,
+                            160.2,
+                            155.5,
+                            155.5,
+                            169.7,
+                            158,
+                            158.2,
+                            161.3,
+                            151,
+                            165.2,
+                            164,
+                            163,
+                            151.3,
+                            146.6,
+                            159,
+                            165.1,
+                            160.4,
+                            167,
+                            162.8,
+                            162.9,
+                            151.2,
+                            151.7,
+                            156
+                        ],
+                        borderColor: 'rgb(54, 162, 235)', 
+                        type: 'line',
+                    }, {
+                        label: 'Average Speed',
+                        data: [
+                            2.6,
+                            2.4,
+                            2.6,
+                            2.5,
+                            2.6,
+                            2.6,
+                            2.4,
+                            2.7,
+                            2.5,
+                            2.5,
+                            2.7,
+                            2.7,
+                            2.6,
+                            2.3,
+                            2.7,
+                            2.5,
+                            2.7,
+                            2.6,
+                            2.6,
+                            2.6,
+                            2.6,
+                            2.6,
+                            2.5,
+                            2.7,
+                            2.7,
+                            2.1
+                        ],
+                        borderColor: 'rgb(54, 162, 145)',
+                        type: 'line',
+                    }],
+                    labels: ['2021-07-08', '2021-07-05', '2021-07-04', '2021-06-26', '2021-06-25', '2021-06-25', '2021-06-19', '2021-06-16', '2021-06-15', '2021-06-13', '2021-06-07', '2021-05-26', '2021-05-24', '2021-05-23', '2021-05-12', '2021-05-10', '2021-05-06', '2021-05-05', '2021-05-04', '2021-05-03', '2021-04-14', '2021-04-10', '2021-04-08', '2021-03-31', '2021-03-29']
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }}
                     
-                    ]
-                }]
-            },
-            options:{}
-        })
-    </script>
+                });
+                </script>
+                </div>
 </body>
 </html>
