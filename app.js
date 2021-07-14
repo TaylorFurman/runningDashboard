@@ -39,6 +39,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static('templates'));
 app.use(express.json());
 
+
  const auth_link =  'https://www.strava.com/oauth/token?client_id=68038&client_secret=2a40842684ae251d045f93518aa934fef7d8af67&refresh_token=a3eff98359952cd21d262b9abb4e4961e3d72339&grant_type=refresh_token'
 
  // const auth_link = 'https://www.strava.com/oauth/token?client_id=68038&client_secret=2a40842684ae251d045f93518aa934fef7d8af67&refresh_token=a3eff98359952cd21d262b9abb4e4961e3d72339&grant_type=refresh_token'
@@ -81,42 +82,35 @@ app.get('/app.js', async (req, res) => {
  }catch(error){
  }});
 
-app.use(express.static('templates'));
 
 
 
+
+
+
+
+app.get('/runners', async (req, res) => {
+  
+  db.any(`SELECT * FROM run_data VALUES`)
+  .then(run=>{
+    const run_data = JSON.stringify(run);
+    //console.log(run_data);
+    let fs = require("fs")
+    fs.writeFile(__dirname + "/templates/run_history.json", run_data, function(error){
+      if (error){
+        console.timeLog("Error")
+      }else{
+        console.log("Success");
+      }
+      
+    })
+    res.render('runnerinfo')
+  })
+});
 
 
 var PORT = process.env.PORT || 8000;
 app.listen(PORT, function () {
   console.log('Listening on port ' + PORT);
 });
-
-
-app.get('/runners', async (req, res) => {
-
-db.any(`SELECT * FROM run_data VALUES`)
-.then(run=>{
-  const run_data = JSON.stringify(run);
-  //console.log(run_data);
-  let fs = require("fs")
-  fs.writeFile(__dirname + "/templates/run_history.json", run_data, function(error){
-    if (error){
-      console.timeLog("Error")
-    }else{
-      console.log("Success");
-    }
-    
-  })
-<<<<<<< HEAD
-  res.render('runnerinfo')
-  })
-});
-=======
-  res.render('runnerInfo')
-  })
-});
-
-     
       
->>>>>>> 434fdfbbead62073101c67dd2c186d1528d5e4ca

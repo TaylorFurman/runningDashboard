@@ -1,34 +1,3 @@
-<<<<<<< HEAD
-{
-  "name": "runningdashboard",
-  "version": "1.0.0",
-  "description": "",
-  "main": "app.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "nodemon app.js",
-    "start": "node app.js"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/TaylorFurman/runningDashboard.git"
-  },
-  "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/TaylorFurman/runningDashboard/issues"
-  },
-  "homepage": "https://github.com/TaylorFurman/runningDashboard#readme",
-  "dependencies": {
-    "axios": "^0.21.1",
-    "chart.js": "^3.4.1",
-    "express": "^4.17.1",
-    "express-es6-template-engine": "^2.2.3",
-    "nodemon": "^2.0.9",
-    "pg-promise": "^10.10.2"
-  }
-}
-=======
 {
   "name": "runningdashboard",
   "version": "1.0.0",
@@ -67,4 +36,3 @@
     "browserify": "^17.0.0"
   }
 }
->>>>>>> 434fdfbbead62073101c67dd2c186d1528d5e4ca
