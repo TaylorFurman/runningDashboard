@@ -1,5 +1,7 @@
 const express = require('express');
-const fetch = require("node-fetch")
+const chart = require('chart.js');
+require('dotenv').config();
+//const fetch = require("node-fetch")
 //const StravaApiV3 = require('strava_api_v3')
 const es6Renderer = require('express-es6-template-engine');
 const pgp = require('pg-promise')({ });
@@ -32,7 +34,7 @@ app.use(express.json());
 
 
 
-app.get('/app.js', async (req, res) => {
+app.get(__dirname + '/', async (req, res) => {
   try {
     console.log("Connected...")
     res.render('index')
@@ -49,34 +51,34 @@ app.post('/runners', async (req, res,) => {
   console.log("Taylor",access_token);
   var auth_url = (`'https://www.strava.com/api/v3/athlete/activities?&access_token='${access_token}`);
   console.log("Shane", auth_url);
-    axios.get(auth_url + access_token)
-    .then(res => {
-      var runs = res.data; 
-      console.log("Taylor", runs)
-         runs.map(run => {
-           db.any(`INSERT INTO run_data (
-            distance, 
-            type, 
-            start_date, 
-            average_speed, 
-            average_heart_rate, 
-            moving_time, 
-            start_latlng, 
-            end_latlng
-            ) VALUES (
-              ${run.distance},
-              ${run.type}, 
-              ${run.start_date},
-              ${run.average_speed}, 
-              ${run.average_heart_rate}, 
-              ${run.moving_time}, 
-              ${run.start_latlng}, 
-              ${run.endlatlng})`
-            )  
+    // axios.get(auth_url + access_token)
+    // .then(res => {
+    //   var runs = res.data; 
+    //   console.log("Taylor", runs)
+    //      runs.map(run => {
+    //        db.any(`INSERT INTO run_data (
+    //         distance, 
+    //         type, 
+    //         start_date, 
+    //         average_speed, 
+    //         average_heart_rate, 
+    //         moving_time, 
+    //         start_latlng, 
+    //         end_latlng
+    //         ) VALUES (
+    //           ${run.distance},
+    //           ${run.type}, 
+    //           ${run.start_date},
+    //           ${run.average_speed}, 
+    //           ${run.average_heart_rate}, 
+    //           ${run.moving_time}, 
+    //           ${run.start_latlng}, 
+    //           ${run.endlatlng})`
+    //         )  
              
-        })
-    });
-    res.render('runnerName')
+    //     })
+    // });
+    res.render('runnerInfo')
       });
         
 //   .catch (error) {
