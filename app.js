@@ -84,11 +84,6 @@ app.get('/app.js', async (req, res) => {
 
 
 
-
-
-
-
-
 app.get('/runners', async (req, res) => {
   
   db.any(`SELECT * FROM run_data VALUES`)
