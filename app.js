@@ -108,6 +108,15 @@ db.any(`SELECT * FROM run_data VALUES`)
     }
     
   })
+<<<<<<< HEAD
   res.render('runnerinfo')
   })
 });
+=======
+  res.render('runnerInfo')
+  })
+});
+
+     
+      
+>>>>>>> 434fdfbbead62073101c67dd2c186d1528d5e4ca
