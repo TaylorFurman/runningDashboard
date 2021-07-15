@@ -15,26 +15,17 @@
    crossorigin=""></script>
 
    <script src="../Polyline.encoded.js"></script>
+
+
    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+
    <link rel="stylesheet" href="./styles.css">
    <script src="require.js"></script>
    <script src="index.js"></script>
 
-   <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.8.0/main.min.js"></script>
-   <link href='fullcalendar/main.css' rel='stylesheet' />
-    <script src='fullcalendar/main.js'></script>
-    <script>
 
-        document.addEventListener('DOMContentLoaded', function() {
-          var calendarEl = document.getElementById('calendar');
-          var calendar = new FullCalendar.Calendar(calendarEl, {
-            initialView: 'dayGridMonth'
-          });
-          calendar.render();
-        });
-  
-      </script>
 
 <!--Start of the HTML Body-->
     <title>Your Info</title>
@@ -47,16 +38,13 @@
     <div id="runData">
 
     <label for="date">Select a running date</label>
+
     <select name="date" id="run_date" onchange="list()">
+
         <option value="">--Select--</option>
     </select>
 
     <div id="mapid"></div>
-
-    <div id='calendar'></div>
-
-   
-
 
 
 
@@ -190,9 +178,15 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
 }).addTo(map);
 
+function stuff(asdf){
+    console.log(asdf);
+}
+
 axios.get('run_history.json')
 .then(res=> {
     data = res.data;
+    stuff(x)
+    var y = x;
     //loops through all data in JSON file and displays them on Leaflet map
     //Need to figure out how to individually select by running id as well
     
@@ -205,10 +199,6 @@ axios.get('run_history.json')
             })
         
         //add to map
-        function list(){
-            var x = document.getElementById("run_date").value;
-            console.log(x);
-        }
 
 
         var coordinates = L.Polyline.fromEncoded(data[i].summary_polyline).getLatLngs()
@@ -231,7 +221,10 @@ axios.get('run_history.json')
      
     //console.log(res.data);
 });
-
+function list(){
+    var x = document.getElementById("run_date").value;
+    console.log(x);
+}
 
 
 
