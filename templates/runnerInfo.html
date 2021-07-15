@@ -38,12 +38,13 @@
     <div id="runData">
 
     <label for="date">Select a running date</label>
-    <select name="date" id="run_date" onchange='list()'>
+
+    <select name="date" id="run_date" onchange="list()">
+
         <option value="">--Select--</option>
     </select>
 
     <div id="mapid"></div>
-
 
 
 
@@ -198,8 +199,6 @@ axios.get('run_history.json')
             })
         
         //add to map
-        
-
 
 
         var coordinates = L.Polyline.fromEncoded(data[i].summary_polyline).getLatLngs()
