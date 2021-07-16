@@ -5,7 +5,6 @@ const es6Renderer = require('express-es6-template-engine');
 const pgp = require('pg-promise')({ });
 const axios = require('axios')
 const Chart = require('chart.js')
-const exphbs = require('express-handlebars');
 const { dirname } = require('path');
 
 
@@ -29,9 +28,6 @@ const app = express();
 //require('dotenv').config();
 
 app.engine('html', es6Renderer);
-app.engine('handlebars', exphbs());
-app.set('views', 'dbFactory');
-app.set('views', 'stravaInfo')
 app.set('views', 'templates');
 app.set('view engine', 'html', 'css', 'js');
 
@@ -84,7 +80,7 @@ app.get('/app.js', async (req, res) => {
 
 
 
-app.get('/runners', async (req, res) => {
+app.post('/runners', async (req, res) => {
   
   db.any(`SELECT * FROM run_data VALUES`)
   .then(run=>{
@@ -99,7 +95,7 @@ app.get('/runners', async (req, res) => {
       }
       
     })
-    res.render('runnerinfo')
+    res.render('runnerInfo')
   })
 });
 

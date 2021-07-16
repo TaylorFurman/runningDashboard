@@ -67,98 +67,24 @@
                     datasets: [{
                         label: 'Run Distance in Kilometers',
                         data: [
-                            6.4,
-                            5.2,
-                            5.1,
-                            5.1,
-                            2.3,
-                            10.1,
-                            1.9,
-                            6.9,
-                            5.1,
-                            2.1,
-                            3.6,
-                            5.1,
-                            8.4,
-                            8.1,
-                            3.2,
-                            4.9,
-                            6.4,
-                            3.2,
-                            5.5,
-                            5.03,
-                            6.4,
-                            3.2,
-                            5.06,
-                            3.2,
-                            11.3
+                            `SELECT distance FROM run_data WHERE run_data.id = 76`
                         ],
                         borderColor: ['rgb(255,99,132)'],
                         backgroundColor: ['rgb(255, 99, 132, 0.2)']
                     }, {
                         label: 'Average Heart Rate',
                         data: [
-                            160.4,
-                            162.9,
-                            162.9,
-                            161.6,
-                            160.2,
-                            155.5,
-                            155.5,
-                            169.7,
-                            158,
-                            158.2,
-                            161.3,
-                            151,
-                            165.2,
-                            164,
-                            163,
-                            151.3,
-                            146.6,
-                            159,
-                            165.1,
-                            160.4,
-                            167,
-                            162.8,
-                            162.9,
-                            151.2,
-                            151.7,
-                            156
+                            `SELECT average_heartrate FROM run_data WHERE run_data.id = 76`
                         ],
                         borderColor: 'rgb(54, 162, 235)', 
-                        type: 'line',
+                        type: 'bar',
                     }, {
                         label: 'Average Speed',
                         data: [
-                            2.6,
-                            2.4,
-                            2.6,
-                            2.5,
-                            2.6,
-                            2.6,
-                            2.4,
-                            2.7,
-                            2.5,
-                            2.5,
-                            2.7,
-                            2.7,
-                            2.6,
-                            2.3,
-                            2.7,
-                            2.5,
-                            2.7,
-                            2.6,
-                            2.6,
-                            2.6,
-                            2.6,
-                            2.6,
-                            2.5,
-                            2.7,
-                            2.7,
-                            2.1
+                           `SELECT average_speed FROM run_data WHERE run_data.id = 76`
                         ],
                         borderColor: 'rgb(54, 162, 145)',
-                        type: 'line',
+                        type: 'bar',
                     }],
                     labels: ['2021-07-08', '2021-07-05', '2021-07-04', '2021-06-26', '2021-06-25', '2021-06-25', '2021-06-19', '2021-06-16', '2021-06-15', '2021-06-13', '2021-06-07', '2021-05-26', '2021-05-24', '2021-05-23', '2021-05-12', '2021-05-10', '2021-05-06', '2021-05-05', '2021-05-04', '2021-05-03', '2021-04-14', '2021-04-10', '2021-04-08', '2021-03-31', '2021-03-29']
                 },
@@ -178,19 +104,51 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
 }).addTo(map);
 
-function stuff(asdf){
-    console.log(asdf);
-}
 
 axios.get('run_history.json')
 .then(res=> {
     data = res.data;
-    stuff(x)
-    var y = x;
     //loops through all data in JSON file and displays them on Leaflet map
     //Need to figure out how to individually select by running id as well
     
     for(i=0; i<data.length; i++){
+        var theChart = document.getElementById('chart').getContext('2d');
+            var theRunData = new Chart(theChart, {
+                type: 'bar',
+                data: {
+                    datasets: [{
+                        label: 'Run Distance in Kilometers',
+                        data: [
+                        data[0].distance
+                        ],
+                        borderColor: ['rgb(255,99,132)'],
+                        backgroundColor: ['rgb(255, 99, 132, 0.2)']
+                    }, {
+                        label: 'Average Heart Rate',
+                        data: [
+                        data[0].average_heartrate
+                        ],
+                        borderColor: 'rgb(54, 162, 235)', 
+                        type: 'bar',
+                    }, {
+                        label: 'Average Speed',
+                        data: [
+                        data[0].average_speed
+                        ],
+                        borderColor: 'rgb(54, 162, 145)',
+                        type: 'bar',
+                    }],
+                    labels: ['Distance', 'Heart Rate', 'Speed']
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }}
+                    
+                });
+
         //add a dropdown menu
             $(function(){
                 $.each(data, function(i, item){
