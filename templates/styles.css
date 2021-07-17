@@ -1,9 +1,12 @@
-#runData{
-    display: grid;
-}
+
 #mapid{
     height:330px;
     width:330px;
     background-color: black;
 }
-#chartData{width: 20%; height: 20%;}
+#chartData{
+    width: 20%; 
+    height: 20%;
+    display: flex;
+    justify-self: center;
+}
