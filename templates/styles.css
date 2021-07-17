@@ -1,5 +1,9 @@
+#runData{
+    display: grid;
+}
 #mapid{
-    height:600px;
-    width:600px;
+    height:330px;
+    width:330px;
     background-color: black;
 }
+#chartData{width: 20%; height: 20%;}

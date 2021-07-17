@@ -24,110 +24,52 @@
    <link rel="stylesheet" href="./styles.css">
    <script src="require.js"></script>
    <script src="index.js"></script>
+   <script src="../run_history.json"></script>
 
 
 
 <!--Start of the HTML Body-->
     <title>Your Info</title>
-    <style>
-        
-        #chartData{width: 300px; height: 300px;}
-    </style>
 </head>
 <body>
     <h1>Your Run Stats</h1>
     <div id="runData">
-
     <label for="date">Select a running date</label>
-
     <select name="date" id="run_date" onchange="list()">
-
-        <option value="">--Select--</option>
+    <option value="">--Select--</option>
     </select>
-
     <div id="mapid"></div>
-
-
-
-<!--Start of the Javascript-->
-    
-    <script src="../run_history.json"></script>
-
-    
-
-        <div id="chartData">
-            <canvas id="chart1" width="300px" height="300px"></canvas>
-        </div>
+    <div id="chartData">
+        <canvas id="chart1" width="250px" height="250px"></canvas>
+    </div>
         <script>
             axios.get('run_history.json')
             .then(res=> {
                 data = res.data;
                 for(i=0; i<data.length; i++){
-                    var theChart1 = document.getElementById('chart1').getContext('2d');
-                    var runData = new Chart(theChart1, {
+                    var ctx = document.getElementById('chart1').getContext('2d');
+                    var runData = new Chart(ctx, {
                             type: 'bar',
                             data: {
+                                labels: ['Distance','Average Speed','Heart Rate'],
                                 datasets: [{
-                                    label: 'Distance In Kilometers',
-                                    yAxisID: 'Distance In Kilometers',
-                                    data: [data[0].distance],
+                                    label: 'Run Stats',
+                                    data: [data[0].distance, data[0].moving_time, data[0].average_heart_rate],
                                     borderColor: ['rgb(255,99,132)'],
-                                    backgroundColor: ['rgb(255, 99, 132, 0.2)'],
-                                },
-                                {
-                                    label: 'Average Speed',
-                                    yAxisID: 'Distance In Kilometers',
-                                    data: [data[0].moving_time],
-                                    borderColor: ['rgb(0,0,0)'],
-                                    backgroundColor: ['rgb(0,0,0)'],
-                                },
-                                 {
-                                    label: 'Heart Rate',
-                                    yAxisID: 'Heart Rate',
-                                    data: [data[0].average_heart_rate],
-                                    borderColor: ['rgb(255,99,132)'],
-                                    backgroundColor: ['rgb(255, 99, 132, 0.2)'],
+                                    backgroundColor: ['#add8e6', '#d3d3d3', '#b0c4de']
                                 }],
-                                labels: ['Distance', 'Heart Rate']
-                            },
-                            options: {
-                                scales: {
-                                yAxis: [{
-                                    id: 'Distance In Kilometers',
-                                    type: 'linear',
-                                    position: 'left',
-                                }, {
-                                    id: 'Distance In Kilometers',
-                                    type: 'linear',
-                                    position: 'left',
-                                }, {
-                                    id: 'Heart Rate',
-                                    type: 'linear',
-                                    position: 'right',
-                                    ticks: {
-                                        beginAtZero: true
-                                    }
-                                }]
-                                }
-                            }
+                                },
+                            options: {}
                         });
                     }});
 
         </script>
-    
-
-        
         <script>
-             
             //2D GIS map below
 var map = L.map('mapid').setView([29.7858, -95.7700], 13);
-
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
 }).addTo(map);
-
-
-
 axios.get('run_history.json')
 .then(res=> {
     data = res.data;
@@ -137,25 +79,6 @@ axios.get('run_history.json')
     
 
     for(i=0; i<data.length; i++){
-       
-        
-            // var theChart2 = document.getElementById('chart2').getContext('2d');
-            // var runHealth = new Chart(theChart2, {
-            //     type: 'bar',
-            //     data: {
-            //         datasets: [{
-            //             label: 'Heart Rate',
-            //             data: [
-            //             data[0].average_heart_rate
-            //         ],
-            //             borderColor: ['rgb(255,99,132)'],
-            //             backgroundColor: ['rgb(255, 99, 132, 0.2)']
-            //         }],
-            //         labels: ['BPM']
-            //     },
-            //         options: {}
-            // });
-
         //add a dropdown menu
             $(function(){
                 $.each(data, function(i, item){
@@ -164,11 +87,7 @@ axios.get('run_history.json')
             })
         
         //add to map
-
-
         var coordinates = L.Polyline.fromEncoded(data[i].summary_polyline).getLatLngs()
-        
-
         L.polyline(
             coordinates,
             {
@@ -180,19 +99,11 @@ axios.get('run_history.json')
 
         ).addTo(map)
     }
-
-     
-
-     
-    //console.log(res.data);
 });
 function list(){
     var x = document.getElementById("run_date").value;
     console.log(x);
 }
-
-
-
     </script>
     </div>
 </body>
