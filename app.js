@@ -64,6 +64,11 @@ app.get('/app.js', async (req, res) => {
 
      //Need to finish IF statement below
       //if(db.any(`SELECT * FROM run_day VALUES(run_id) IS `))
+      // for(var i=0; i<run.length; i++){
+      //   if()
+      // }
+      // SELECT * FROM run_data ORDER BY ID DESC LIMIT 10
+
         await db.any(`INSERT INTO run_data VALUES(DEFAULT, ${run[0].distance},
               '${run[0].type}', 
               '${run[0].start_date}',
