@@ -8,6 +8,10 @@ const Chart = require('chart.js')
 const exphbs = require('express-handlebars');
 const { dirname } = require('path');
 
+var DATABASE_ID = process.env.DATABASE_ID;
+var DATABASE_PASSWORD = process.env.DATABASE_PASSWORD;
+var DATABASE_HOST = process.env.DATABASE_HOST;
+var DATABASE_USER = process.env.DATABASE_USER;
 
 //following tutorial
 
@@ -20,7 +24,7 @@ const { dirname } = require('path');
 
 //continue original code
 const dbsettings = process.env.DATABASE_URL ||{
-database:'vgaimcoc',
+database: DATABASE_ID,
  password: 'LyK0N6ydx5vdmkNT-e8i1i7Wlejo3Hjl',
  host: 'batyr.db.elephantsql.com',
  user: 'vgaimcoc'  }
@@ -64,6 +68,11 @@ app.get('/app.js', async (req, res) => {
 
      //Need to finish IF statement below
       //if(db.any(`SELECT * FROM run_day VALUES(run_id) IS `))
+      // for(var i=0; i<run.length; i++){
+      //   if()
+      // }
+      // SELECT * FROM run_data ORDER BY ID DESC LIMIT 10
+
         await db.any(`INSERT INTO run_data VALUES(DEFAULT, ${run[0].distance},
               '${run[0].type}', 
               '${run[0].start_date}',
