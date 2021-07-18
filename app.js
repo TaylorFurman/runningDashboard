@@ -8,6 +8,10 @@ const Chart = require('chart.js')
 const exphbs = require('express-handlebars');
 const { dirname } = require('path');
 
+var DATABASE_ID = process.env.DATABASE_ID;
+var DATABASE_PASSWORD = process.env.DATABASE_PASSWORD;
+var DATABASE_HOST = process.env.DATABASE_HOST;
+var DATABASE_USER = process.env.DATABASE_USER;
 
 //following tutorial
 
@@ -20,7 +24,7 @@ const { dirname } = require('path');
 
 //continue original code
 const dbsettings = process.env.DATABASE_URL ||{
-database:'vgaimcoc',
+database: DATABASE_ID,
  password: 'LyK0N6ydx5vdmkNT-e8i1i7Wlejo3Hjl',
  host: 'batyr.db.elephantsql.com',
  user: 'vgaimcoc'  }

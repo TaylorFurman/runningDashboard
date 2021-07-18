@@ -65,45 +65,12 @@ crossorigin=""></script>
 
 <script>
 
-//var $select = $('#run_date')
+//2D GIS map below
+var map = L.map('mapid').setView([29.7858, -95.7700], 13);
 
-// $.getJSON('run_history.JSON', function(data){
-//     $select.html('');
-//     for (var i = 0; i< data.length; i++){
-//         $select.append('<option id= "' + data['start_date'])
-//     }
-// })
-
-
-
-// $(document).ready(function(){
-//     load_json_data('run_date')
-//     function load_json_data(id, run_id){
-//         var html_code = '';
-//         $.getJSON('run_history.json', function(data){
-//             html_code += '<option value="">Select '+id+'</option>';
-//             $.each(data, function(key, value){
-//                 if(id =="start_date"){
-//                     if(value.run_id =='0'){
-//                         html_code += '<option value="'+value.id+'">'+value.name+'</option>';
-//                     }
-//                 }
-//                 else{
-//                     if(value.run_id == run_id){
-//                         html_code += '<option value="'+value.id+'">'+value.name+'</option>';
-//                     }
-//                 }
-//             });
-//             $('#'+id).html(html_code);
-//         })
-//     }
-// })
-
-// function removeRoute(){
-//     map.removeLayer(map);
-// }
-
-
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+}).addTo(map);
 
 function selectChange(){
     var select = document.getElementById('run_date').value 
@@ -120,38 +87,51 @@ function selectChange(){
                 run_data.set("Average_Speed", res.data[i].average_speed);
                 run_data.set("Average_Heart_Rate", res.data[i].average_heart_rate);
                 run_data.set("Moving_Time", res.data[i].moving_time);
+                run_data.set("start_latlng", res.data[i].start_latlng);
+                run_data.set("end_latlng", res.data[i].end_latlng);
                 run_data.set("run_id", res.data[i].run_id);
                 run_data.set("summary_polyline", res.data[i].summary_polyline);
 
-
+                let data_id = run_data.get("id")
                 let run_distance = run_data.get("Distance")
                 let start_date = run_data.get("Start_Date")
-                let data_id = run_data.get("id")
+                let start_latlng = run_data.get("start_latlng")
+                let end_latlng = run_data.get("end_latlng")
                 let summary_polyline = run_data.get("summary_polyline")
 
 
-   
-            //    if (window.onload == true){
-            //        console.log("True")
-            //     var coordinates = L.Polyline.fromEncoded(res.data[i].summary_polyline).getLatLngs()
-            //         //console.log(coordinates);
-            //         L.polyline(
-            //             coordinates,
-            //             {
-            //                 color:"green",
-            //                 weight: 5,
-            //                 opacity: .7,
-            //                 lineJoin: 'round'
-            //             }
-            //         )
-            //         .addTo(map)  
-
-            //     }
-
                 if (select == start_date){
-                   // map.removeLayer();
+                   //L.polyline(remove());
                     console.log(run_distance)
+                    var startLat = start_latlng.substring(0,9);
+                    var startLon = start_latlng.substring(10,20);
+                    var endLat = end_latlng.substring(0,9);
+                    var endLon = end_latlng.substring(10,20);
+                    console.log(endLat);
+                    console.log(end_latlng);
+                     var startIcon = L.icon({
+                         iconUrl: "https://cdn.pixabay.com/photo/2013/07/13/10/29/icon-157354_1280.png",                     
+                         iconSize: [38, 95],
+                         iconAnchor: [22, 94],
+                         popupAnchor: [-3, -76],
+                         //shadowUrl: 'my-icon-shadow.png',
+                         //shadowSize: [68, 95],
+                         //shadowAnchor: [22, 94]
+                     });
+                     var endIcon = L.icon({
+                         iconUrl: "https://cdn.pixabay.com/photo/2016/08/30/13/18/pin-1630707_1280.png",                     
+                         iconSize: [38, 95],
+                         iconAnchor: [22, 94],
+                         popupAnchor: [-3, -76],
+                         //shadowUrl: 'my-icon-shadow.png',
+                         //shadowSize: [68, 95],
+                         //shadowAnchor: [22, 94]
+                     });
+
+
                     var coordinates = L.Polyline.fromEncoded(summary_polyline).getLatLngs()
+                    L.marker([startLat, startLon],{icon: startIcon}).addTo(map)
+                    L.marker([endLat, endLon],{icon: endIcon}).addTo(map)
                     L.polyline(
                     coordinates,
                     {
@@ -160,9 +140,8 @@ function selectChange(){
                         opacity: .7,
                         lineJoin: 'round'
                     }
-                )
-                               
-                .addTo(map) 
+                ).addTo(map)
+                
                 }               
             }    
         })
@@ -197,12 +176,7 @@ axios.get('run_history.json')
     
     }
 ) 
-//2D GIS map below
-var map = L.map('mapid').setView([29.7858, -95.7700], 13);
 
-L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-}).addTo(map);
 
 
 
