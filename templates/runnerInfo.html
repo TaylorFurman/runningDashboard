@@ -5,25 +5,17 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
 integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
 crossorigin=""/>
-
 <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
 integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
 crossorigin=""></script>
-
 <script src="../Polyline.encoded.js"></script>
-
-
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu" crossorigin="anonymous">
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha384-aJ21OjlMXNL5UyIl/XNwTMqvzeRMZH2w8c5cRVpzpU8Y5bApTppSuUkhZXN0VxHd" crossorigin="anonymous"></script>
-
-
 <link rel="stylesheet" href="./styles.css">
 <script src="require.js"></script>
 <script src="index.js"></script>
@@ -58,10 +50,10 @@ crossorigin=""></script>
 
 
 <!--Start of the Javascript-->
-<script src=".\runningDashboard\app.js"></script>
+<script src="./runningDashboard/app.js"></script>
 <script src="../run_history.json"></script>
 
-<canvas id="chart" width="300" height="300"></canvas>
+<canvas id="chart1" width="300" height="300"></canvas>
 
 <script>
 
@@ -72,13 +64,16 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
 }).addTo(map);
 
+
 function selectChange(){
     var select = document.getElementById('run_date').value 
     //console.log(select);
     if (select == select){
-        
+        destroy();
+        render();
         axios.get('run_history.json').then(res=>{
             for(i=0; i<data.length; i++){
+                
                 let run_data = new Map();
                 run_data.set("id", res.data[i].id)
                 run_data.set("Distance", res.data[i].distance);
@@ -91,17 +86,33 @@ function selectChange(){
                 run_data.set("end_latlng", res.data[i].end_latlng);
                 run_data.set("run_id", res.data[i].run_id);
                 run_data.set("summary_polyline", res.data[i].summary_polyline);
-
+                
                 let data_id = run_data.get("id")
                 let run_distance = run_data.get("Distance")
                 let moving_time = run_data.get("Moving_Time")
-                let average_heart_rate = run_data.("Average_Heart_Rate")
+                let average_heart_rate = run_data.get("Average_Heart_Rate")
                 let start_date = run_data.get("Start_Date")
                 let start_latlng = run_data.get("start_latlng")
                 let end_latlng = run_data.get("end_latlng")
-                let summary_polyline = run_data.get("summary_polyline")
-
-
+                let summary_polyline = run_data.get("summary_polyline");
+                const data = {
+                            labels: ['Distance','Average Speed','Heart Rate'],
+                            datasets: [{
+                                label: 'Run Stats',
+                                data: [run_distance, moving_time, average_heart_rate],
+                                borderColor: ['rgb(255,99,132)'],
+                                backgroundColor: ['#add8e6', '#d3d3d3', '#b0c4de']
+                            }]
+                        };
+                const chartConfig = {
+                    type: 'bar',
+                        data,
+                        options: {}
+                };
+                const myChart = new Chart(
+                    document.getElementById('chart1'),
+                    chartConfig
+                    );
                 if (select == start_date){
                    //L.polyline(remove());
                     console.log(run_distance)
@@ -119,36 +130,63 @@ function selectChange(){
                          //shadowUrl: 'my-icon-shadow.png',
                          //shadowSize: [68, 95],
                          //shadowAnchor: [22, 94]
-                     });
-                     var endIcon = L.icon({
-                         iconUrl: "https://cdn.pixabay.com/photo/2016/08/30/13/18/pin-1630707_1280.png",                     
-                         iconSize: [38, 95],
-                         iconAnchor: [22, 94],
-                         popupAnchor: [-3, -76],
-                         //shadowUrl: 'my-icon-shadow.png',
-                         //shadowSize: [68, 95],
-                         //shadowAnchor: [22, 94]
-                     });
-
-
-                    var coordinates = L.Polyline.fromEncoded(summary_polyline).getLatLngs()
-                    L.marker([startLat, startLon],{icon: startIcon}).addTo(map)
-                    L.marker([endLat, endLon],{icon: endIcon}).addTo(map)
-                    L.polyline(
-                    coordinates,
-                    {
-                        color:"blue",
-                        weight: 5,
-                        opacity: .7,
-                        lineJoin: 'round'
-                    }
-                ).addTo(map)
-                
-                }               
-            }    
-        })
-    }
-}
+                        });
+                        var endIcon = L.icon({
+                            iconUrl: "https://cdn.pixabay.com/photo/2016/08/30/13/18/pin-1630707_1280.png",                     
+                            iconSize: [38, 95],
+                            iconAnchor: [22, 94],
+                            popupAnchor: [-3, -76],
+                            //shadowUrl: 'my-icon-shadow.png',
+                            //shadowSize: [68, 95],
+                            //shadowAnchor: [22, 94]
+                        });
+                        
+                        
+                        var coordinates = L.Polyline.fromEncoded(summary_polyline).getLatLngs()
+                        L.marker([startLat, startLon],{icon: startIcon}).addTo(map)
+                        L.marker([endLat, endLon],{icon: endIcon}).addTo(map)
+                        L.polyline(
+                            coordinates,
+                            {
+                                color:"blue",
+                                weight: 5,
+                                opacity: .7,
+                                lineJoin: 'round'
+                            }
+                            ).addTo(map)
+                            
+                        }               
+                    }    
+                })
+            }
+        }
+        function destroy() {
+            myChart.destroy();
+        };
+        function render() {
+             myChart
+        } 
+        // function createChart() {
+            //     var ctx = document.getElementById('chart1').getContext('2d');
+            //     if (ctx == select) {}
+//     axios.get('run_history.json')
+//             .then(res=> {
+//                 for(i=0; i<data.length; i++){
+//                     var runData = new Chart(ctx, {
+//                             type: 'bar',
+//                             data: {
+//                                 labels: ['Distance','Average Speed','Heart Rate'],
+//                                 datasets: [{
+//                                     label: 'Run Stats',
+//                                     data: [data[0].distance, data[0].moving_time, data[0].average_heart_rate],
+//                                     borderColor: ['rgb(255,99,132)'],
+//                                     backgroundColor: ['#add8e6', '#d3d3d3', '#b0c4de']
+//                                 }],
+//                                 },
+//                             options: {}
+//                         });
+//                     }});  
+// }
 axios.get('run_history.json')
 .then(res=> {
     data = res.data;
@@ -177,122 +215,7 @@ axios.get('run_history.json')
     }
     
     }
-) 
-
-
-
-
-//chart below
-var theChart = document.getElementById('chart').getContext('2d');
-var theRunData = new Chart(theChart, {
-type: 'bar',
-data: {
-    datasets: [{
-        label: 'Run Distance in Kilometers',
-        data: [
-            6.4,
-            5.2,
-            5.1,
-            5.1,
-            2.3,
-            10.1,
-            1.9,
-            6.9,
-            5.1,
-            2.1,
-            3.6,
-            5.1,
-            8.4,
-            8.1,
-            3.2,
-            4.9,
-            6.4,
-            3.2,
-            5.5,
-            5.03,
-            6.4,
-            3.2,
-            5.06,
-            3.2,
-            11.3
-        ],
-        borderColor: ['rgb(255,99,132)'],
-        backgroundColor: ['rgb(255, 99, 132, 0.2)']
-    }, {
-        label: 'Average Heart Rate',
-        data: [
-            160.4,
-            162.9,
-            162.9,
-            161.6,
-            160.2,
-            155.5,
-            155.5,
-            169.7,
-            158,
-            158.2,
-            161.3,
-            151,
-            165.2,
-            164,
-            163,
-            151.3,
-            146.6,
-            159,
-            165.1,
-            160.4,
-            167,
-            162.8,
-            162.9,
-            151.2,
-            151.7,
-            156
-        ],
-        borderColor: 'rgb(54, 162, 235)', 
-        type: 'line',
-    }, {
-        label: 'Average Speed',
-        data: [
-            2.6,
-            2.4,
-            2.6,
-            2.5,
-            2.6,
-            2.6,
-            2.4,
-            2.7,
-            2.5,
-            2.5,
-            2.7,
-            2.7,
-            2.6,
-            2.3,
-            2.7,
-            2.5,
-            2.7,
-            2.6,
-            2.6,
-            2.6,
-            2.6,
-            2.6,
-            2.5,
-            2.7,
-            2.7,
-            2.1
-        ],
-        borderColor: 'rgb(54, 162, 145)',
-        type: 'line',
-    }],
-    labels: ['2021-07-08', '2021-07-05', '2021-07-04', '2021-06-26', '2021-06-25', '2021-06-25', '2021-06-19', '2021-06-16', '2021-06-15', '2021-06-13', '2021-06-07', '2021-05-26', '2021-05-24', '2021-05-23', '2021-05-12', '2021-05-10', '2021-05-06', '2021-05-05', '2021-05-04', '2021-05-03', '2021-04-14', '2021-04-10', '2021-04-08', '2021-03-31', '2021-03-29']
-},
-options: {
-    scales: {
-        y: {
-            beginAtZero: true
-        }
-    }}
-    
-});
+);
 
 
 
@@ -300,7 +223,8 @@ options: {
 
 
 
-                </script>
-                </div>
+
+</script>
+</div>
 </body>
 </html>
