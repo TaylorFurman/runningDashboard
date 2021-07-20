@@ -15,7 +15,9 @@
         #button { background: #333; border: none; height: 36px; padding: 0 1rem; margin: 0.25rem; border-radius: 3px; outline: none; color: #fff; }
         #header {display: flex; justify-content: center;}
         #logo {width: 70vw; height: 70%;}
-        #logoImage {width: 35vw; height: 20%; background-color: lightgray;}
+        #logoImage {width: 35vw; height: 20%; background-color: lightgray; padding-left: 800px;}
+        #welcomeMessage{display: flex; justify-content: center;}
+        #searchBarWrapper{padding-top: 12px; padding-left: 15px;}
         
     </style>
 </head>
@@ -27,7 +29,6 @@
     </div>
     <div id="welcomeMessage">
         <h2>Welcome Runner</h2>
-        <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Asperiores, veritatis <br> reprehenderit similique ipsam natus eligendi vel eaque, doloribus officia voluptate ratione.<br> Sed, mollitia repellat. Non nihil sunt eius a consequuntur!</p>
         <div id="searchBarWrapper">
             <form id="form" action="/runners" method="GET">
             <input type="text" name="searchBar" id="searchBar" placeholder="Search For Your Name">
