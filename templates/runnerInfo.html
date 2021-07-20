@@ -35,7 +35,7 @@ crossorigin=""></script>
 <div id="mapid"></div>
 <script src="./runningDashboard/app.js"></script>
 <script src="../run_history.json"></script>
-<canvas id="chart1" width="300" height="300"></canvas>
+<canvas id="chart1" width="200" height="200"></canvas>
 <script>
 //2D GIS map below
 var map = L.map('mapid').setView([29.7858, -95.7700], 13);
@@ -122,14 +122,16 @@ function selectChange(){
                     }
                 ).addTo(map)
                 createChart();
+                //newChart();
                 }               
             }    
         })
     }
 }
 function createChart() {
+    var select = document.getElementById('run_date').value 
     var chart1 = document.getElementById('chart1');
-    if(chart1 == chart1) {
+    if(select == select) {
      axios.get('run_history.json')
      .then(res=> {
          for(i=0; i<res.data.length; i++){
@@ -139,6 +141,7 @@ function createChart() {
                 res.data[i].average_heart_rate
                 res.data[i].moving_time
             });
+                var runDate = res.data[i].start_date
                 const chartDataResults = {
                             labels: ['Distance','BPM', 'Pace'],
                             datasets: [{
@@ -157,11 +160,51 @@ function createChart() {
                     document.getElementById('chart1'),
                     chartConfig
                     );
-                    //myChart.destroy();
+                    if(select == runDate) {
+                        myChart.destroy();
+                        //newChart();
+                    }
                 };
             });
         };
         };
+// function newChart() {
+//     var select = document.getElementById('run_date').value 
+//     var chart1 = document.getElementById('chart1');
+//     if(chart1 == chart1) {
+//      axios.get('run_history.json')
+//      .then(res=> {
+//          for(i=0; i<res.data.length; i++){
+//             res.data.map(data => {
+//                 var runDate = res.data[i].start_date
+//                 console.log(res.data[i].distance)
+//                 res.data[i].distance
+//                 res.data[i].average_heart_rate
+//                 res.data[i].moving_time
+//             });
+//                 const chartDataResults = {
+//                             labels: ['Distance','BPM', 'Pace'],
+//                             datasets: [{
+//                                 label: 'Run Stats',
+//                                 data: [res.data[i].distance, res.data[i].average_heart_rate, res.data[i].moving_time],
+//                                 borderColor: ['rgb(255,99,132)'],
+//                                 backgroundColor: ['#add8e6', '#d3d3d3', '#b0c4de']
+//                             }]
+//                         };
+//                 const chartConfig = {
+//                     type: 'bar',
+//                         data: chartDataResults,
+//                         options: {}
+//                     };
+//                 var myChart = new Chart(
+//                     document.getElementById('chart1'),
+//                     chartConfig
+//                     );
+//                     //myChart.destroy();
+//                 };
+//             });
+//         };
+//         };
 axios.get('run_history.json')
 .then(res=> {
     data = res.data;
