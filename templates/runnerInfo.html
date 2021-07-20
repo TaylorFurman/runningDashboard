@@ -19,20 +19,32 @@ crossorigin=""></script>
 <link rel="stylesheet" href="./styles.css">
 <script src="require.js"></script>
 <script src="index.js"></script>
+
+<!--Start of the HTML Body-->
 <title>Your Info</title>
 <style>
     #runData {width: 40%; height: 30%;}
 </style>
 </head>
 <body>
-<h1>Welcome Taylor</h1>
+<h1>Runner </h1>
 <div id="runData">
+
 <label for="date">Select a running date</label>
+
 <select name="date" id="run_date" onchange="selectChange()"><option value="">--Select--</option></select>
+
+
 <div id="mapid"></div>
+
+
+
+<!--Start of the Javascript-->
 <script src="./runningDashboard/app.js"></script>
 <script src="../run_history.json"></script>
+
 <canvas id="chart1" width="300" height="300"></canvas>
+
 <script>
 
 //2D GIS map below
@@ -50,18 +62,22 @@ function clearMap() {
         }
     }
 }
-var map = L.map('mapid').setView([29.7858, -95.7700], 13);
+
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
 }).addTo(map);
 
+
 var markerGroup = L.layerGroup().addTo(map)
+
 
 function selectChange(){
     var select = document.getElementById('run_date').value 
+    
     if (select == select){
         axios.get('run_history.json').then(res=>{
             for(i=0; i<data.length; i++){
+                
                 let run_data = new Map();
                 run_data.set("id", res.data[i].id)
                 run_data.set("Distance", res.data[i].distance);
@@ -83,7 +99,6 @@ function selectChange(){
                 let start_latlng = run_data.get("start_latlng")
                 let end_latlng = run_data.get("end_latlng")
                 let summary_polyline = run_data.get("summary_polyline");
-
                 if (select == start_date){
                     var startLat = start_latlng.substring(0,9);
                     var startLon = start_latlng.substring(10,20);
@@ -94,35 +109,41 @@ function selectChange(){
                          iconUrl: "https://cdn.pixabay.com/photo/2013/07/13/10/29/icon-157354_1280.png",                     
                          iconSize: [38, 95],
                          iconAnchor: [22, 94],
-                         popupAnchor: [-3, -76]
-                        });
-                        var endIcon = L.icon({
-                            iconUrl: "https://cdn.pixabay.com/photo/2016/08/30/13/18/pin-1630707_1280.png",                     
-                            iconSize: [38, 95],
-                            iconAnchor: [22, 94],
-                            popupAnchor: [-3, -76],
-                        });
-                        
-                        clearMap();
-                        markerGroup.clearLayers();
-                        var coordinates = L.Polyline.fromEncoded(summary_polyline).getLatLngs()
-                        var startMarker = L.marker([startLat, startLon],{icon: startIcon}).addTo(markerGroup)
-                        var endMarker = L.marker([endLat, endLon],{icon: endIcon}).addTo(markerGroup)
-                        var polyline = L.polyline(
-                            coordinates,
-                            {
-                                color:"blue",
-                                weight: 5,
-                                opacity: .7,
-                                lineJoin: 'round'
-                            }
-                            ).addTo(map)
-                            createChart();
-                        }               
-                    }    
-                })
-            }
-        } 
+                         popupAnchor: [-3, -76],
+                         
+                     });
+                     var endIcon = L.icon({
+                         iconUrl: "https://cdn.pixabay.com/photo/2016/08/30/13/18/pin-1630707_1280.png",                     
+                         iconSize: [38, 95],
+                         iconAnchor: [22, 94],
+                         popupAnchor: [-3, -76],
+                         
+                     });
+                    
+                    clearMap();
+                    
+                    markerGroup.clearLayers();                   
+                    var coordinates = L.Polyline.fromEncoded(summary_polyline).getLatLngs()                   
+                    var startMarker = L.marker([startLat, startLon],{icon: startIcon}).addTo(markerGroup)
+                    var endMarker = L.marker([endLat, endLon],{icon: endIcon}).addTo(markerGroup)
+                    
+
+                    var polyline = L.polyline(
+                    coordinates,
+                    {
+                        color:"blue",
+                        weight: 5,
+                        opacity: .7,
+                        lineJoin: 'round'
+                    }
+                ).addTo(map)
+                createChart();
+                
+                }               
+            }    
+        })
+    }
+}
 function createChart() {
     var chart1 = document.getElementById('chart1');
     if(chart1 == chart1) {
@@ -187,5 +208,6 @@ axios.get('run_history.json')
 );
 </script>
 </div>
+
 </body>
 </html>
