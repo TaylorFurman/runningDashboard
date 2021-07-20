@@ -5,7 +5,6 @@ const es6Renderer = require('express-es6-template-engine');
 const pgp = require('pg-promise')({ });
 const axios = require('axios')
 const Chart = require('chart.js')
-const exphbs = require('express-handlebars');
 const { dirname } = require('path');
 
 var DATABASE_ID = process.env.DATABASE_ID;
@@ -33,9 +32,6 @@ const app = express();
 //require('dotenv').config();
 
 app.engine('html', es6Renderer);
-app.engine('handlebars', exphbs());
-app.set('views', 'dbFactory');
-app.set('views', 'stravaInfo')
 app.set('views', 'templates');
 app.set('view engine', 'html', 'css', 'js');
 
