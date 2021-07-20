@@ -7,33 +7,22 @@ const axios = require('axios')
 const Chart = require('chart.js')
 const { dirname } = require('path');
 
-var DATABASE_ID = process.env.DATABASE_ID;
-var DATABASE_PASSWORD = process.env.DATABASE_PASSWORD;
-var DATABASE_HOST = process.env.DATABASE_HOST;
-var DATABASE_USER = process.env.DATABASE_USER;
-
-//following tutorial
-
-// console.log(map);
-// map.setView([47.70, 13.35], 7);
-// var osm_mapnik = L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-// 	maxZoom: 19,
-// 	attribution: '&copy; OSM Mapnik <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-// }).addTo(map);
-
-//continue original code
+var databaseID = process.env.DATABASE_ID;
+var databasePassword = process.env.DATABASE_PASSWORD;
+var databaseHost = process.env.DATABASE_HOST;
+var databaseUser = process.env.DATABASE_USER;
 const dbsettings = process.env.DATABASE_URL ||{
-database: DATABASE_ID,
- password: 'LyK0N6ydx5vdmkNT-e8i1i7Wlejo3Hjl',
- host: 'batyr.db.elephantsql.com',
- user: 'vgaimcoc'  }
+database: process.env.DATABASE_ID,
+ password: process.env.DATABASE_PASSWORD,
+ host: process.env.DATABASE_HOST,
+ user: process.env.DATABASE_USER}
 const db = pgp(dbsettings);
 const app = express();
 //require('dotenv').config();
 
 app.engine('html', es6Renderer);
 app.set('views', 'templates');
-app.set('view engine', 'html', 'css', 'js');
+app.set('view engine', 'html');
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static('templates'));
@@ -49,49 +38,38 @@ app.use(express.json());
 
 
 
-app.get('/app.js', async (req, res) => {
+app.get('/app.js', async () => {
  try {
   var getAccessToken = await axios.post(auth_link);
   var {data:{access_token}} = getAccessToken;
   console.log(access_token);
-
-//var data = await db.query('SELECT * FROM run_data');
-//res.send(data);
    try{
     await axios.get(auth_url + access_token)
     .then(async res => {
-     var run = res.data; 
-
-     //Need to finish IF statement below
-      //if(db.any(`SELECT * FROM run_day VALUES(run_id) IS `))
-      // for(var i=0; i<run.length; i++){
-      //   if()
-      // }
-      // SELECT * FROM run_data ORDER BY ID DESC LIMIT 10
-
-        await db.any(`INSERT INTO run_data VALUES(DEFAULT, ${run[0].distance},
-              '${run[0].type}', 
-              '${run[0].start_date}',
-              '${run[0].average_speed}', 
-              '${run[0].average_heartrate}', 
-              '${run[0].moving_time}', 
-              '${run[0].start_latlng}', 
-              '${run[0].end_latlng}',
-              '${run[0].id}',
-              '${run[0].map.summary_polyline}')`);      
-      });  
- }catch(error){
- console.log(error);
- }
- 
- }catch(error){
- }});
+      var run = res.data; 
+      await db.any(`INSERT INTO run_data VALUES(DEFAULT, ${run[0].distance},
+           '${run[0].type}', 
+           '${run[0].start_date}',
+           '${run[0].average_speed}', 
+           '${run[0].average_heartrate}', 
+           '${run[0].moving_time}', 
+           '${run[0].start_latlng}', 
+           '${run[0].end_latlng}',
+           '${run[0].id}',
+           '${run[0].map.summary_polyline}')`);      
+    });  
+  }catch(error){
+    console.log(error);
+  }
+  
+}catch(error){
+}});
 
 
 
 app.get('/runners', async (req, res) => {
   
-  db.any(`SELECT * FROM run_data VALUES`)
+  db.any(`SELECT * FROM run_data VALUES`) 
   .then(run=>{
     const run_data = JSON.stringify(run);
     //console.log(run_data);

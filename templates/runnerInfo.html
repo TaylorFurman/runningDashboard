@@ -19,61 +19,33 @@ crossorigin=""></script>
 <link rel="stylesheet" href="./styles.css">
 <script src="require.js"></script>
 <script src="index.js"></script>
-
-
-
-
-
-
-<!--Start of the HTML Body-->
 <title>Your Info</title>
 <style>
     #runData {width: 40%; height: 30%;}
 </style>
 </head>
 <body>
-<h1>New Page</h1>
+<h1>Welcome Taylor</h1>
 <div id="runData">
-
 <label for="date">Select a running date</label>
-<!--  
-
-
-
--->
 <select name="date" id="run_date" onchange="selectChange()"><option value="">--Select--</option></select>
-
-
-
 <div id="mapid"></div>
-
-
-
-<!--Start of the Javascript-->
 <script src="./runningDashboard/app.js"></script>
 <script src="../run_history.json"></script>
-
 <canvas id="chart1" width="300" height="300"></canvas>
-
 <script>
 
 //2D GIS map below
 var map = L.map('mapid').setView([29.7858, -95.7700], 13);
-
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
 }).addTo(map);
 
-
 function selectChange(){
     var select = document.getElementById('run_date').value 
-    //console.log(select);
     if (select == select){
-        destroy();
-        render();
         axios.get('run_history.json').then(res=>{
             for(i=0; i<data.length; i++){
-                
                 let run_data = new Map();
                 run_data.set("id", res.data[i].id)
                 run_data.set("Distance", res.data[i].distance);
@@ -95,24 +67,7 @@ function selectChange(){
                 let start_latlng = run_data.get("start_latlng")
                 let end_latlng = run_data.get("end_latlng")
                 let summary_polyline = run_data.get("summary_polyline");
-                const data = {
-                            labels: ['Distance','Average Speed','Heart Rate'],
-                            datasets: [{
-                                label: 'Run Stats',
-                                data: [run_distance, moving_time, average_heart_rate],
-                                borderColor: ['rgb(255,99,132)'],
-                                backgroundColor: ['#add8e6', '#d3d3d3', '#b0c4de']
-                            }]
-                        };
-                const chartConfig = {
-                    type: 'bar',
-                        data,
-                        options: {}
-                };
-                const myChart = new Chart(
-                    document.getElementById('chart1'),
-                    chartConfig
-                    );
+
                 if (select == start_date){
                    //L.polyline(remove());
                     console.log(run_distance)
@@ -154,39 +109,47 @@ function selectChange(){
                                 lineJoin: 'round'
                             }
                             ).addTo(map)
-                            
+                            createChart();
                         }               
                     }    
                 })
             }
-        }
-        function destroy() {
-            myChart.destroy();
-        };
-        function render() {
-             myChart
         } 
-        // function createChart() {
-            //     var ctx = document.getElementById('chart1').getContext('2d');
-            //     if (ctx == select) {}
-//     axios.get('run_history.json')
-//             .then(res=> {
-//                 for(i=0; i<data.length; i++){
-//                     var runData = new Chart(ctx, {
-//                             type: 'bar',
-//                             data: {
-//                                 labels: ['Distance','Average Speed','Heart Rate'],
-//                                 datasets: [{
-//                                     label: 'Run Stats',
-//                                     data: [data[0].distance, data[0].moving_time, data[0].average_heart_rate],
-//                                     borderColor: ['rgb(255,99,132)'],
-//                                     backgroundColor: ['#add8e6', '#d3d3d3', '#b0c4de']
-//                                 }],
-//                                 },
-//                             options: {}
-//                         });
-//                     }});  
-// }
+function createChart() {
+    var chart1 = document.getElementById('chart1');
+    if(chart1 == chart1) {
+     axios.get('run_history.json')
+     .then(res=> {
+         for(i=0; i<res.data.length; i++){
+            res.data.map(data => {
+                console.log(res.data[i].distance)
+                res.data[i].distance
+                res.data[i].average_heart_rate
+                res.data[i].moving_time
+            });
+                const chartDataResults = {
+                            labels: ['Distance','BPM', 'Pace'],
+                            datasets: [{
+                                label: 'Run Stats',
+                                data: [res.data[i].distance, res.data[i].average_heart_rate, res.data[i].moving_time],
+                                borderColor: ['rgb(255,99,132)'],
+                                backgroundColor: ['#add8e6', '#d3d3d3', '#b0c4de']
+                            }]
+                        };
+                const chartConfig = {
+                    type: 'bar',
+                        data: chartDataResults,
+                        options: {}
+                    };
+                var myChart = new Chart(
+                    document.getElementById('chart1'),
+                    chartConfig
+                    );
+                    //myChart.destroy();
+                };
+            });
+        };
+        };
 axios.get('run_history.json')
 .then(res=> {
     data = res.data;
@@ -216,14 +179,6 @@ axios.get('run_history.json')
     
     }
 );
-
-
-
-
-
-
-
-
 </script>
 </div>
 </body>
