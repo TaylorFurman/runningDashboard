@@ -79,8 +79,7 @@ app.get('/runners', async (req, res) => {
         console.timeLog("Error")
       }else{
         console.log("Success");
-      }
-      
+      }     
     })
     res.render('runnerinfo')
   })
