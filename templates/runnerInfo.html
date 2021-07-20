@@ -28,11 +28,6 @@ crossorigin=""></script>
 <script src="require.js"></script>
 <script src="index.js"></script>
 
-
-
-
-
-
 <!--Start of the HTML Body-->
 <title>Your Info</title>
 <style>
@@ -44,13 +39,8 @@ crossorigin=""></script>
 <div id="runData">
 
 <label for="date">Select a running date</label>
-<!--  
 
-
-
--->
 <select name="date" id="run_date" onchange="selectChange()"><option value="">--Select--</option></select>
-
 
 
 <div id="mapid"></div>
@@ -85,9 +75,11 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
 }).addTo(map);
 
+var markerGroup = L.layerGroup().addTo(map)
+
 function selectChange(){
     var select = document.getElementById('run_date').value 
-    //console.log(select);
+    
     if (select == select){
         
         axios.get('run_history.json').then(res=>{
@@ -116,10 +108,6 @@ function selectChange(){
 
 
                 if (select == start_date){
-                   
-                    console.log(run_distance)
-                    console.log(moving_time)
-                    console.log(average_heart_rate)
                     var startLat = start_latlng.substring(0,9);
                     var startLon = start_latlng.substring(10,20);
                     var endLat = end_latlng.substring(0,9);
@@ -130,32 +118,20 @@ function selectChange(){
                          iconSize: [38, 95],
                          iconAnchor: [22, 94],
                          popupAnchor: [-3, -76],
-                         //shadowUrl: 'my-icon-shadow.png',
-                         //shadowSize: [68, 95],
-                         //shadowAnchor: [22, 94]
+                         
                      });
                      var endIcon = L.icon({
                          iconUrl: "https://cdn.pixabay.com/photo/2016/08/30/13/18/pin-1630707_1280.png",                     
                          iconSize: [38, 95],
                          iconAnchor: [22, 94],
                          popupAnchor: [-3, -76],
-                         //shadowUrl: 'my-icon-shadow.png',
-                         //shadowSize: [68, 95],
-                         //shadowAnchor: [22, 94]
+                         
                      });
-                    //L.markerClusterGroup()
+                    
                     clearMap();
-                    // var markerGroup = L.layerGroup().addTo(map)
-                    // markerGroup.clearLayers();
-                    if (typeof markerGroup !=='undefined'){
-                        console.log("Hello")
-                        markerGroup.clearLayers();
-                        console.log(markerGroup);
-                    }
-                    var coordinates = L.Polyline.fromEncoded(summary_polyline).getLatLngs()
-                    // var startMarker = L.marker([startLat, startLon],{icon: startIcon}).addTo(map)
-                    // var endMarker = L.marker([endLat, endLon],{icon: endIcon}).addTo(map)
-                    var markerGroup = L.layerGroup().addTo(map)
+                    
+                    markerGroup.clearLayers();                   
+                    var coordinates = L.Polyline.fromEncoded(summary_polyline).getLatLngs()                   
                     var startMarker = L.marker([startLat, startLon],{icon: startIcon}).addTo(markerGroup)
                     var endMarker = L.marker([endLat, endLon],{icon: endIcon}).addTo(markerGroup)
                     
@@ -184,8 +160,6 @@ axios.get('run_history.json')
         $(function(){
             $.each(data, function(i, item){               
                 $("#run_date").append("<option value = "+ data[i].start_date+">" + data[i].start_date +"</option>");
-                //$("#run_date").append("<option value =" + data_dropDown+">" + data_dropDown +"</option>");
-
                 })
             })         
         //add all data to map 
@@ -319,13 +293,6 @@ options: {
     }}
     
 });
-
-
-
-
-
-
-
                 </script>
                 </div>
 </body>
