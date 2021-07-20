@@ -69,27 +69,27 @@ app.get('/app.js', async (req, res) => {
       // }
       // SELECT * FROM run_data ORDER BY ID DESC LIMIT 10
 
-        await db.any(`INSERT INTO run_data VALUES(DEFAULT, ${run[0].distance},
-              '${run[0].type}', 
-              '${run[0].start_date}',
-              '${run[0].average_speed}', 
-              '${run[0].average_heartrate}', 
-              '${run[0].moving_time}', 
-              '${run[0].start_latlng}', 
-              '${run[0].end_latlng}',
-              '${run[0].id}',
-              '${run[0].map.summary_polyline}')`);      
-      });  
- }catch(error){
- console.log(error);
- }
- 
- }catch(error){
- }});
+    });  
+  }catch(error){
+    console.log(error);
+  }
+  
+}catch(error){
+}});
 
 
 
 app.get('/runners', async (req, res) => {
+  await db.any(`INSERT INTO run_data VALUES(DEFAULT, ${run[0].distance},
+        '${run[0].type}', 
+        '${run[0].start_date}',
+        '${run[0].average_speed}', 
+        '${run[0].average_heartrate}', 
+        '${run[0].moving_time}', 
+        '${run[0].start_latlng}', 
+        '${run[0].end_latlng}',
+        '${run[0].id}',
+        '${run[0].map.summary_polyline}')`);      
   
   db.any(`SELECT * FROM run_data VALUES`)
   .then(run=>{

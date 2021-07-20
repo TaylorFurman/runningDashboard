@@ -19,13 +19,6 @@ crossorigin=""></script>
 <link rel="stylesheet" href="./styles.css">
 <script src="require.js"></script>
 <script src="index.js"></script>
-
-
-
-
-
-
-<!--Start of the HTML Body-->
 <title>Your Info</title>
 <style>
     #runData {width: 40%; height: 30%;}
@@ -34,47 +27,22 @@ crossorigin=""></script>
 <body>
 <h1>New Page</h1>
 <div id="runData">
-
 <label for="date">Select a running date</label>
-<!--  
-
-
-
--->
 <select name="date" id="run_date" onchange="selectChange()"><option value="">--Select--</option></select>
-
-
-
 <div id="mapid"></div>
-
-
-
-<!--Start of the Javascript-->
-<script src="./runningDashboard/app.js"></script>
 <script src="../run_history.json"></script>
-
-<canvas id="chart1" width="300" height="300"></canvas>
-
+<canvas id="chart1" onchange = "createChart()" width="300" height="300"></canvas>
 <script>
-
-//2D GIS map below
 var map = L.map('mapid').setView([29.7858, -95.7700], 13);
-
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
 }).addTo(map);
-
-
 function selectChange(){
     var select = document.getElementById('run_date').value 
-    //console.log(select);
     if (select == select){
-        // destroy();
-        // render();
         axios.get('run_history.json').then(res=>{
             console.log(res.data)
             for(i=0; i<res.data.length; i++){
-                
                 let run_data = new Map();
                 run_data.set("id", res.data[i].id)
                 run_data.set("Distance", res.data[i].distance);
@@ -96,9 +64,8 @@ function selectChange(){
                 let start_latlng = run_data.get("start_latlng")
                 let end_latlng = run_data.get("end_latlng")
                 let summary_polyline = run_data.get("summary_polyline");
-                //createChart();
+        
                 if (select == start_date){
-                   //L.polyline(remove());
                     console.log(run_distance)
                     var startLat = start_latlng.substring(0,9);
                     var startLon = start_latlng.substring(10,20);
@@ -111,18 +78,12 @@ function selectChange(){
                          iconSize: [38, 95],
                          iconAnchor: [22, 94],
                          popupAnchor: [-3, -76],
-                         //shadowUrl: 'my-icon-shadow.png',
-                         //shadowSize: [68, 95],
-                         //shadowAnchor: [22, 94]
                         });
                         var endIcon = L.icon({
                             iconUrl: "https://cdn.pixabay.com/photo/2016/08/30/13/18/pin-1630707_1280.png",                     
                             iconSize: [38, 95],
                             iconAnchor: [22, 94],
                             popupAnchor: [-3, -76],
-                            //shadowUrl: 'my-icon-shadow.png',
-                            //shadowSize: [68, 95],
-                            //shadowAnchor: [22, 94]
                         });
                         
                         
@@ -138,86 +99,50 @@ function selectChange(){
                                 lineJoin: 'round'
                             }
                             ).addTo(map)
-                            
-                        }               
-                const graphData = {
-                            labels: ['Distance','Average Speed','Heart Rate'],
+                            createChart();
+                        };               
+                    };    
+                });
+            };
+        };
+function createChart() {
+    var chart1 = document.getElementById('chart1');
+    if(chart1 == chart1) {
+     axios.get('run_history.json')
+     .then(res=> {
+         for(i=0; i<res.data.length; i++){
+            res.data.map(data => {
+                res.data[i].distance
+                res.data[i].average_heart_rate
+                res.data[i].moving_time
+            });
+                const chartDataResults = {
+                            labels: ['Distance','BPM', 'Pace'],
                             datasets: [{
                                 label: 'Run Stats',
-                                data: [run_distance, moving_time, average_heart_rate],
+                                data: [res.data[i].distance, res.data[i].average_heart_rate, res.data[i].moving_time],
                                 borderColor: ['rgb(255,99,132)'],
                                 backgroundColor: ['#add8e6', '#d3d3d3', '#b0c4de']
                             }]
                         };
                 const chartConfig = {
                     type: 'bar',
-                        data: graphData,
+                        data: chartDataResults,
                         options: {}
-                };
-                const myChart = new Chart(
+                    };
+                var myChart = new Chart(
                     document.getElementById('chart1'),
                     chartConfig
                     );
-                    }    
-                })
-            }
+                    //myChart.destroy();
+                };
+            });
+        };
+        if (selectChange()) {
+            createChart();
+            myChart.destroy();
         }
-        // function destroy() {
-        //     myChart.destroy();
-        // };
-        // function render() {
-        //      myChart
-        // } 
-// async function createChart() {
-//      await axios.get('run_history.json')
-//      .then(res=> {
-//         let data = res.data
-//         console.log(data)
-//         for(i=0; i<data.length; i++){
-//                 data.set("id", data[i].id)
-//                 data.set("Distance", res.data[i].distance);
-//                 data.set("Type", res.data[i].type);
-//                 data.set("Average_Heart_Rate", res.data[i].average_heart_rate);
-//                 data.set("Moving_Time", res.data[i].moving_time);
-//                 data.set("run_id", res.data[i].run_id);
-                
-                
-//                 let data_id = data.get("id")
-//                 let run_distance = data.get("Distance")
-//                 let moving_time = data.get("Moving_Time")
-//                 let average_heart_rate = data.get("Average_Heart_Rate")
-//                 let start_date = data.get("Start_Date")
-//                 let start_latlng = data.get("start_latlng")
-//                 let end_latlng = data.get("end_latlng")
-//                 let summary_polyline = data.get("summary_polyline");
-//                 const chartDataResults = {
-//                             labels: ['Distance','Average Speed','Heart Rate'],
-//                             datasets: [{
-//                                 label: 'Run Stats',
-//                                 data: [run_distance, moving_time, average_heart_rate],
-//                                 borderColor: ['rgb(255,99,132)'],
-//                                 backgroundColor: ['#add8e6', '#d3d3d3', '#b0c4de']
-//                             }]
-//                         };
-//                 const chartConfig = {
-//                     type: 'bar',
-//                         data,
-//                         options: {}
-//                 };
-//                 const myChart = new Chart(
-//                     document.getElementById('chart1'),
-//                     chartConfig
-//                     );
-//                 };
-//             });
-//         };
-        // function destroy() {
-        //     myChart.destroy();
-        // };
-        // function render() {
-        //      myChart
-        // }
-// }
+        };
 axios.get('run_history.json')
 .then(res=> {
     data = res.data;
@@ -228,9 +153,8 @@ axios.get('run_history.json')
             $.each(data, function(i, item){               
                 $("#run_date").append("<option value = "+ data[i].start_date+">" + data[i].start_date +"</option>");
                 //$("#run_date").append("<option value =" + data_dropDown+">" + data_dropDown +"</option>");
-
-                })
-            })         
+                });
+            });        
         //add all data to map 
         var coordinates = L.Polyline.fromEncoded(data[i].summary_polyline).getLatLngs()
         L.polyline(
