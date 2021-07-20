@@ -20,11 +20,6 @@ crossorigin=""></script>
 <script src="require.js"></script>
 <script src="index.js"></script>
 
-
-
-
-
-
 <!--Start of the HTML Body-->
 <title>Your Info</title>
 <style>
@@ -32,17 +27,12 @@ crossorigin=""></script>
 </style>
 </head>
 <body>
-<h1>New Page</h1>
+<h1>Runner </h1>
 <div id="runData">
 
 <label for="date">Select a running date</label>
-<!--  
 
-
-
--->
 <select name="date" id="run_date" onchange="selectChange()"><option value="">--Select--</option></select>
-
 
 
 <div id="mapid"></div>
@@ -60,14 +50,30 @@ crossorigin=""></script>
 //2D GIS map below
 var map = L.map('mapid').setView([29.7858, -95.7700], 13);
 
+function clearMap() {
+    for(i in map._layers) {
+        if(map._layers[i]._path != undefined) {
+            try {
+                map.removeLayer(map._layers[i]);
+            }
+            catch(e) {
+                console.log("problem with " + e + map._layers[i]);
+            }
+        }
+    }
+}
+
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
 }).addTo(map);
 
 
+var markerGroup = L.layerGroup().addTo(map)
+
+
 function selectChange(){
     var select = document.getElementById('run_date').value 
-    //console.log(select);
+    
     if (select == select){
         destroy();
         render();
@@ -114,79 +120,50 @@ function selectChange(){
                     chartConfig
                     );
                 if (select == start_date){
-                   //L.polyline(remove());
-                    console.log(run_distance)
                     var startLat = start_latlng.substring(0,9);
                     var startLon = start_latlng.substring(10,20);
                     var endLat = end_latlng.substring(0,9);
                     var endLon = end_latlng.substring(10,20);
-                    console.log(endLat);
-                    console.log(end_latlng);
+                    
                      var startIcon = L.icon({
                          iconUrl: "https://cdn.pixabay.com/photo/2013/07/13/10/29/icon-157354_1280.png",                     
                          iconSize: [38, 95],
                          iconAnchor: [22, 94],
                          popupAnchor: [-3, -76],
-                         //shadowUrl: 'my-icon-shadow.png',
-                         //shadowSize: [68, 95],
-                         //shadowAnchor: [22, 94]
-                        });
-                        var endIcon = L.icon({
-                            iconUrl: "https://cdn.pixabay.com/photo/2016/08/30/13/18/pin-1630707_1280.png",                     
-                            iconSize: [38, 95],
-                            iconAnchor: [22, 94],
-                            popupAnchor: [-3, -76],
-                            //shadowUrl: 'my-icon-shadow.png',
-                            //shadowSize: [68, 95],
-                            //shadowAnchor: [22, 94]
-                        });
-                        
-                        
-                        var coordinates = L.Polyline.fromEncoded(summary_polyline).getLatLngs()
-                        L.marker([startLat, startLon],{icon: startIcon}).addTo(map)
-                        L.marker([endLat, endLon],{icon: endIcon}).addTo(map)
-                        L.polyline(
-                            coordinates,
-                            {
-                                color:"blue",
-                                weight: 5,
-                                opacity: .7,
-                                lineJoin: 'round'
-                            }
-                            ).addTo(map)
-                            
-                        }               
-                    }    
-                })
-            }
-        }
-        function destroy() {
-            myChart.destroy();
-        };
-        function render() {
-             myChart
-        } 
-        // function createChart() {
-            //     var ctx = document.getElementById('chart1').getContext('2d');
-            //     if (ctx == select) {}
-//     axios.get('run_history.json')
-//             .then(res=> {
-//                 for(i=0; i<data.length; i++){
-//                     var runData = new Chart(ctx, {
-//                             type: 'bar',
-//                             data: {
-//                                 labels: ['Distance','Average Speed','Heart Rate'],
-//                                 datasets: [{
-//                                     label: 'Run Stats',
-//                                     data: [data[0].distance, data[0].moving_time, data[0].average_heart_rate],
-//                                     borderColor: ['rgb(255,99,132)'],
-//                                     backgroundColor: ['#add8e6', '#d3d3d3', '#b0c4de']
-//                                 }],
-//                                 },
-//                             options: {}
-//                         });
-//                     }});  
-// }
+                         
+                     });
+                     var endIcon = L.icon({
+                         iconUrl: "https://cdn.pixabay.com/photo/2016/08/30/13/18/pin-1630707_1280.png",                     
+                         iconSize: [38, 95],
+                         iconAnchor: [22, 94],
+                         popupAnchor: [-3, -76],
+                         
+                     });
+                    
+                    clearMap();
+                    
+                    markerGroup.clearLayers();                   
+                    var coordinates = L.Polyline.fromEncoded(summary_polyline).getLatLngs()                   
+                    var startMarker = L.marker([startLat, startLon],{icon: startIcon}).addTo(markerGroup)
+                    var endMarker = L.marker([endLat, endLon],{icon: endIcon}).addTo(markerGroup)
+                    
+
+                    var polyline = L.polyline(
+                    coordinates,
+                    {
+                        color:"blue",
+                        weight: 5,
+                        opacity: .7,
+                        lineJoin: 'round'
+                    }
+                ).addTo(map)
+                
+                }               
+            }    
+        })
+    }
+}
+
 axios.get('run_history.json')
 .then(res=> {
     data = res.data;
@@ -196,8 +173,6 @@ axios.get('run_history.json')
         $(function(){
             $.each(data, function(i, item){               
                 $("#run_date").append("<option value = "+ data[i].start_date+">" + data[i].start_date +"</option>");
-                //$("#run_date").append("<option value =" + data_dropDown+">" + data_dropDown +"</option>");
-
                 })
             })         
         //add all data to map 
@@ -220,11 +195,119 @@ axios.get('run_history.json')
 
 
 
+//chart below
+var theChart = document.getElementById('chart').getContext('2d');
+var theRunData = new Chart(theChart, {
+type: 'bar',
+data: {
+    datasets: [{
+        label: 'Run Distance in Kilometers',
+        data: [
+            6.4,
+            5.2,
+            5.1,
+            5.1,
+            2.3,
+            10.1,
+            1.9,
+            6.9,
+            5.1,
+            2.1,
+            3.6,
+            5.1,
+            8.4,
+            8.1,
+            3.2,
+            4.9,
+            6.4,
+            3.2,
+            5.5,
+            5.03,
+            6.4,
+            3.2,
+            5.06,
+            3.2,
+            11.3
+        ],
+        borderColor: ['rgb(255,99,132)'],
+        backgroundColor: ['rgb(255, 99, 132, 0.2)']
+    }, {
+        label: 'Average Heart Rate',
+        data: [
+            160.4,
+            162.9,
+            162.9,
+            161.6,
+            160.2,
+            155.5,
+            155.5,
+            169.7,
+            158,
+            158.2,
+            161.3,
+            151,
+            165.2,
+            164,
+            163,
+            151.3,
+            146.6,
+            159,
+            165.1,
+            160.4,
+            167,
+            162.8,
+            162.9,
+            151.2,
+            151.7,
+            156
+        ],
+        borderColor: 'rgb(54, 162, 235)', 
+        type: 'line',
+    }, {
+        label: 'Average Speed',
+        data: [
+            2.6,
+            2.4,
+            2.6,
+            2.5,
+            2.6,
+            2.6,
+            2.4,
+            2.7,
+            2.5,
+            2.5,
+            2.7,
+            2.7,
+            2.6,
+            2.3,
+            2.7,
+            2.5,
+            2.7,
+            2.6,
+            2.6,
+            2.6,
+            2.6,
+            2.6,
+            2.5,
+            2.7,
+            2.7,
+            2.1
+        ],
+        borderColor: 'rgb(54, 162, 145)',
+        type: 'line',
+    }],
+    labels: ['2021-07-08', '2021-07-05', '2021-07-04', '2021-06-26', '2021-06-25', '2021-06-25', '2021-06-19', '2021-06-16', '2021-06-15', '2021-06-13', '2021-06-07', '2021-05-26', '2021-05-24', '2021-05-23', '2021-05-12', '2021-05-10', '2021-05-06', '2021-05-05', '2021-05-04', '2021-05-03', '2021-04-14', '2021-04-10', '2021-04-08', '2021-03-31', '2021-03-29']
+},
+options: {
+    scales: {
+        y: {
+            beginAtZero: true
+        }
+    }}
+    
+});
+                </script>
+                </div>
 
-
-
-
-</script>
-</div>
 </body>
 </html>
